@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+    body{
+        /* @apply bg-slate-50 */
+    }
+    .nav-container{
+        @apply flex justify-between px-8 md:px-10 py-3.5 items-center;
+        transition: all 0.5s linear
+    }
+    .fixed-nav{
+        @apply fixed top-0 left-0 right-0 flex justify-between  px-7 md:px-10 py-3.5 items-center shadow-md z-50 shadow-slate-100 bg-white ;
+        transition: all 0.5s linear
+    }
+    .logo{
+        @apply text-3xl font-bold text-slate-700
+    }
+    .page-container{
+        @apply hidden md:block
+    }
+    .page-container span{
+        @apply text-slate-600 text-base ml-3 tracking-wider 
+    }
+    .upload-btn{
+        @apply bg-green-600 font-medium px-7 py-2.5 rounded-mdx mt-2
+    }
+    .bar-container{
+        @apply block md:hidden  cursor-pointer;
+    }
+    .bar{
+        @apply bg-green-600 rounded-full cursor-pointer;
+        margin-top: 3px;
+    }
+    .bar-1{
+        width: 30px;
+        height: 4px;
+    }
+     .bar-2{
+        width: 25px;
+        height: 4px;
+    } 
+    .bar-3{
+        width: 20px;
+        height: 4px;
+    }
+    .footer{
+        @apply bg-gray-800 text-slate-50 font-medium text-center p-4
+    }
+
+    .small-screen-nav{
+        @apply fixed block md:hidden shadow-lg z-50 shadow-slate-100 bg-white cursor-pointer p-4;
+        inset: 0 5% 0 0;
+    }
+    .sm-logo-container{
+        @apply p-2 flex justify-between items-center
+    }
+    .sm-bar{
+        width: 30px;
+        height: 4px;
+        @apply bg-red-600 mt-1 rounded-full cursor-pointer
+    }
+    .sm-bar-1{
+        transform: rotate(-45deg) translate(0px, 3px);
+    }
+    .sm-bar-2{
+        transform: rotate(45deg) translate(-2px, -6px);
+    }
+    .link-container span, .auth-container div{
+        @apply block mt-3 text-base font-medium tracking-wide text-slate-600;
+        transition: all 2s linear;
+    }
+    .link-container span a:hover{
+        @apply text-green-600;
+    }
+    .auth-container{
+        @apply flex
+    }
+    .hr{
+        @apply my-3
+    }
+    .auth-container div{
+        @apply bg-slate-300 text-slate-800 px-4 py-1.5 rounded-mdx
+    }
+    .auth-container div:nth-last-child(1){
+        @apply bg-green-600 text-white
+    }
+    .addiitional-nav{
+        @apply hidden md:block bg-white absolute shadow-md shadow-slate-50 rounded-mdx right-20 top-12 z-50 py-2 pl-3 pr-14
+    }
+    .addiitional-nav span{
+        @apply block my-1.5 text-slate-600 text-mdx tracking-widest hover:text-green-600
+    }
+}

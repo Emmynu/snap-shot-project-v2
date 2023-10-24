@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+   .label{
+    @apply ml-2 md:ml-4 lg:ml-12 text-slate-700 text-lg lg:text-xl tracking-wide mt-7 lg:mt-5 mb-3
+   }
+   .photo-container{
+    @apply grid  grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 mx-2 md:mx-4 lg:mx-12
+   }
+   .photo-image{
+    @apply rounded-mdx cursor-pointer bg-slate-300
+   }
+   .error-message{
+    @apply text-center font-bold text-lg;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   }
+   .remove-all-btn{
+    @apply bg-slate-300 px-5 py-1.5  ml-2 md:ml-4 lg:ml-12 mb-3 rounded-mdx text-mdx tracking-wide
+   }
+   .add-new{
+      @apply underline text-green-600 font-medium 
+   }
+}

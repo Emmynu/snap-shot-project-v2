@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base{
+   .home-navlinks{
+    @apply text-center mt-7 mb-7
+   }
+   .home-navlinks span{
+    @apply text-slate-700 text-base tracking-wide ml-2 font-medium
+   }
+   .home-header{
+      @apply  relative
+   }
+   .header-image{
+      @apply w-full object-cover object-center;
+      height: 500px;
+   }
+  .home-label{
+   @apply text-center text-white;
+
+  }
+   .home-label-text{
+      @apply text-3xl lg:text-4xl text-white object-cover font-bold ;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   }
+   .home-image{
+      @apply w-full object-cover;
+      height: 400px;
+   }
+   .search-input{
+      @apply border border-slate-700  w-2/3 md:w-1/2 rounded-mdx outline-none pl-3 text-mdx font-normal tracking-wider text-slate-600;
+      height: 35px;
+   }
+   .home-search{
+      @apply absolute top-1/3 left-3 md:left-40 lg:top-1/3 lg:left-64 tracking-wide z-10 text-xls md:text-3xl lg:text-4xl mx-0 md:mx-12 lg:mx-20 font-bold;
+      font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   }
+}
+
+@media (max-width:800px) {
+   .header-image{
+      width: 100%;
+      height: 300px;
+      background: linear-gradient(),url() center top;
+   }
+}

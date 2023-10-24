@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base{
+    .delete-btn{
+        @apply ml-0 tracking-wider
+    }
+    .publish-btn{
+        @apply ml-2 bg-green-600 text-white tracking-wider font-medium
+    }
+    .upload-description{
+        @apply text-mdx tracking-widest text-left text-slate-600
+    }
+}

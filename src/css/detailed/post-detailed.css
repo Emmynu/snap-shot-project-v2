@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base{
+    .post-footer{
+        @apply flex justify-evenly mt-2.5
+    }
+    .footer-content{
+        @apply flex items-center
+    }
+    .footer-content img{
+        @apply w-4 md:w-5 mr-1
+    }
+    .footer-content span{
+        @apply text-slate-600 tracking-wider ml-0.5 text-sm md:text-mdx
+    }
+    .comment-container{
+        @apply bg-slate-100 mt-1 mx-2 rounded-mdx p-2
+    }
+    .comment-pic{
+        @apply rounded-full;
+        width: 40px;
+        height: 40px;
+    }
+    .comment-name{
+        @apply ml-3 tracking-widest text-mdx md:text-base text-slate-600
+    }
+    .comment-box button{
+        @apply bg-green-600 px-7 py-2 text-white rounded-mdx tracking-wide font-medium
+    }
+    .comment-box textarea{
+        @apply w-11/12
+    }
+}

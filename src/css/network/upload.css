@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind utilities;
+@tailwind components;
+
+@layer base{
+    .upload-container{
+        @apply bg-white shadow-md shadow-slate-200 w-11/12 md:w-8/12 lg:w-6/12 p-3 md:p-8;
+        margin: 3% auto 0;
+    }
+    .upload-header{
+        @apply flex justify-between items-center
+    }
+    .upload-header  h2{
+        @apply text-xl font-medium text-slate-700
+    }
+    .upload-header span{
+        @apply border-2 border-green-600 text-green-600 font-medium px-4 py-1 rounded-mdx
+    }
+    .error-container{
+        @apply text-center
+    }
+    .error-container h2{
+        @apply text-red-600 font-medium text-mdx
+    }
+    .upload-form-container textarea,.upload-form-container input{
+        @apply w-full outline-none border border-slate-800 rounded-mdx p-4 text-slate-600 tracking-widest
+    }
+    .upload-form-container{
+        @apply mt-3
+    }
+    .upload-butn{
+        @apply bg-green-700 py-1.5 text-center text-base mt-4 tracking-wider text-white font-medium w-full
+    }
+    .upload-form-container input{
+        @apply p-2
+    }
+    .loading-btn{
+        @apply bg-slate-300 w-full py-1.5 mt-4 px-4 rounded-mdx
+    }
+}
+
+
+@media (max-width:800px) {
+    .upload-container{
+        margin: 20% auto 0;
+    }
+}

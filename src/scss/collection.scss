@@ -1,0 +1,29 @@
+.keys-container{
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+}
+.collection-keys-container{
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    // margin-left: 40px;
+    
+    .collection-keys{
+        background-color:darken($color: rgb(98, 216, 98), $amount: 50);
+        padding: 5px 10px;
+        letter-spacing: 1px;
+        margin-left: 5px;
+        border-radius: 4px;
+    }
+    .remove-key{
+        font-size: 0.875rem/* 14px */;
+        line-height: 1.25rem;
+        margin-right: 5px;
+        color: red;
+        cursor: pointer;
+    }
+}
+.col-label{
+    font-size: 13px;
+    letter-spacing: 1px;
+}
