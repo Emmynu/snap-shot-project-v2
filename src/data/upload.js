@@ -16,6 +16,7 @@ export async function upload(name,state) {
   ()=>{
     getDownloadURL(uploadTask.snapshot.ref).then(url=>{
         localStorage.setItem("url", JSON.stringify(url))
+        // urlContainer(url)
     })
   })
 }

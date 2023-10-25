@@ -16,7 +16,9 @@
         /* @apply  rounded-2xl; */
         width: 250px;
         height: 250px;
+        aspect-ratio: 1;
         border-radius: 50%;
+        /* aspect: ratio 1px; */
     }
     .update-btn{
         @apply bg-emerald-600 text-white tracking-wider text-center px-5 py-1  rounded-mdx

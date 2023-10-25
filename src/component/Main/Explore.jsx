@@ -1,15 +1,17 @@
 import { useEffect,useState } from 'react'
-import {  NavLink, Outlet } from 'react-router-dom'
+import {  NavLink, Outlet,Link } from 'react-router-dom'
 import "../../css/main/explore.css"
 import AOS from "aos"
 import "aos/dist/aos.css"
-import { useFetch } from '../../hooks/useFetch'
+import { client } from '../../data/client'
 
 
 export default function Explore() {
   const [search,setSearch] = useState("")
+  const [error,setError] = useState("")
+  const [Loading,setLoading] = useState(true)
+  const [Image,setImage] = useState("")
   const searchType = localStorage.getItem("searchType")
-  const { data,isLoading,isFetching,isError } = useFetch()
 
  const activeLink={
     backgroundColor:"green",
@@ -20,13 +22,30 @@ export default function Explore() {
  }
 
  const Active={
-  color:"gray"
+  color:"white",
+  backgroundColor:"gray",
+  padding:"5px",
+  borderRadius:"4px",
+
  }
 
 
  useEffect(() => {
   AOS.init();
 }, [])
+
+useEffect(()=>{
+  client.photos.random().then(res=>{
+    setImage(res?.src?.large2x)
+    setLoading(false)
+  }).catch(err=>{
+    setError(err.message)
+    setLoading(false)
+  })
+},[])
+
+if (Loading)return <h2 className='explore-state'>Loading...</h2>
+if (error)return <h2 className='explore-state'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
 
   function searchPictures(){
     if(search.length > 0 && searchType !== null){
@@ -42,27 +61,27 @@ export default function Explore() {
       <header className='home-header relative'>
 
         <section className='home-label'>
-        <img src={isLoading||isFetching||isError ? "https://images.pexels.com/photos/7709020/pexels-photo-7709020.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940":data?.urls?.full} className='home-image'/>
+        <img src={Image} className='home-image'/>
           <article className='home-search'>
             <h1 className='home-text'>The Best place to get curated pictures and videos</h1>
 
             <div className='mt-5'>
               <section>
-              <span className='label text-mdx text-white'  onClick={()=>localStorage.setItem("searchType","Photos")} style={searchType===`Photos`? Active:null}>
+              <span className='label ml-0 text-mdx text-white cursor-pointer'  onClick={()=>localStorage.setItem("searchType","Photos")} style={searchType===`Photos`? Active:null}>
                   Photos
                 </span>
-                <span className='label text-mdx text-white' onClick={()=>localStorage.setItem("searchType","Videos")} style={searchType===`Videos`? Active:null}>
+                <span className='label ml-1.5 text-mdx text-white cursor-pointer' onClick={()=>localStorage.setItem("searchType","Videos")} style={searchType===`Videos`? Active:null}>
                   Videos
                 </span>
               </section>
 
               <input type="text" name=""  className="search-input"  value={search} onChange={(e)=>setSearch(e.target.value)} />
 
-              <span className='remove-all-btn cursor-pointer font-bold -ml-3 bg-slate-700 -mt-1 py-2.5 rounded-s-mdx' onClick={searchPictures}>
+              <span className='remove-all-btn cursor-pointer font-bold -ml-3 bg-slate-700 -mt-1 py-2.5 rounded-s-mdx' onClick={searchPictures} style={{backgroundColor:"#0c2f0c"}}>
                Search
               </span>
             </div>
-          </article>
+          </article>w
         </section>
       </header> 
       <article className='home-navlinks'>

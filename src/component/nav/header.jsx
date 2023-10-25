@@ -71,7 +71,7 @@ const Header = () => {
 
        <section className='page-container'>
         <span><NavLink to="/">Explore</NavLink></span>
-        <span ><NavLink to="/posts">Network</NavLink></span>
+        <span ><NavLink to="/posts">Trends</NavLink></span>
         <span className='cursor-pointer' onClick={toggleAdditionalNav}>...</span>
         <span className='upload-btn'><NavLink className="text-white" to="upload">Upload</NavLink></span>
        </section>
@@ -82,9 +82,6 @@ const Header = () => {
             </span>
             <span>
                 <NavLink to="/uploads">Uploads</NavLink>
-            </span>
-            <span>
-                <NavLink to="/new-post">Timeline</NavLink>
             </span>
             <span>
                 <NavLink to="/collections">Collecions</NavLink>
@@ -131,15 +128,13 @@ const Header = () => {
         </span>
 
     <section >
+        <span>
+            <NavLink to="/posts">Trends</NavLink>
+        </span>
          <span>
             <NavLink to="/uploads">Uploads</NavLink>
         </span>  
-         <span>
-            <NavLink to="/new-post">Timeline</NavLink>
-        </span>
-        <span>
-            <NavLink to="/posts">Network</NavLink>
-        </span>
+       
     </section>
 
         <hr className='hr'/>

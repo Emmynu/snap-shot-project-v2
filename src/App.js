@@ -18,6 +18,7 @@ import UploadDetailed from './component/Uploads/Upload-detailed'
 import PageNotFound from './component/404-Page/PageNotFound'
 import Search from './component/Main/Search'
 import UpdateProfile from './component/auth/UpdateProfile'
+import Profiles from './component/auth/Profiles'
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
 
      <Route  element={<ProtectedRoute />}>
       <Route path='profile' element={<Profile />}/>
+      <Route path='profile/:userId' element={<Profiles />}/>
       <Route path='update-profile' element={<UpdateProfile />}/>
       <Route path='upload' element={<Upload/>}/>
      </Route>

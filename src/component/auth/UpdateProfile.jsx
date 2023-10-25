@@ -17,7 +17,6 @@ export default function UpdateProfile() {
     const [error,seterror] = useState("")
     const navigate = useNavigate()
     
-    
 
     useEffect(()=>{
       getUsers(setUsers,currentUserID,setisFetching)
@@ -28,10 +27,9 @@ export default function UpdateProfile() {
         e.preventDefault()
         setloading(true)
         // check file format
-        const checkFileType = file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png"
 
         if(name.length > 0 && file!==null){
-          if(checkFileType){
+          if(file.type.startsWith("image/")){
             // upload image to firebase bucket
             upload(file,seterror).then(res=>{
               setTimeout(() => {
@@ -39,7 +37,7 @@ export default function UpdateProfile() {
                 // update profile
                 updateProfile(auth.currentUser,{
                   displayName:name,
-                  photoURL:JSON.parse(localStorage.getItem("url"))
+                  photoURL:localStorage.getItem("url")
               }).then(res=>{
                 users.map(user=>{
                   console.log(user[1].id);
@@ -47,7 +45,7 @@ export default function UpdateProfile() {
                   if(currentUserID===user[1].id){
                     const newInfo ={
                       name,
-                      photoURL:JSON.parse(localStorage.getItem("url")),
+                      photoURL:localStorage.getItem("url"),
                       email:user[1].email,
                       password:user[1].password,
                       id:user[1].id,
@@ -62,7 +60,7 @@ export default function UpdateProfile() {
               }).then(resp=>{
                 navigate("/profile")
               })
-              }, 8100);
+              }, 9100);
             }).catch(err=>{
               seterror(err.message)
             })

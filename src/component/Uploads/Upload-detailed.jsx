@@ -47,7 +47,8 @@ export default function UploadDetailed() {
             <span className='back-btn'>
                 <Link to={-1}>Back to home</Link>
             </span>
-            <img src={upload.url} alt={uid}/>
+            {upload.type==="images"?<img src={upload.url.slice(1)} alt={uid}/>:
+            <video controls className='w-full'><source src={upload.url.slice(1)}></source></video>}
         </section>
 
         <article  className='photo-detailed-label mt-5'>

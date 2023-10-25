@@ -14,26 +14,22 @@ export default function Upload() {
   const [appState,setAppState] = useState("")
   const [description,setDescription] = useState("")
   const [Loading,setLoading] = useState(false)
-  const [user,setUser] = useState(null)
   const navigate = useNavigate()
 
-  useEffect(()=>{
-    currentUser(setUser)
-  },[])
 
   function uploadFile(e){
     e.preventDefault()
    
     if (files !== null) {
-      const checkFileType  = files.type === "image/jpeg" || files.type === "image/jpg" || files.type === "image/png"
-      if (checkFileType) {
+      if (files.type.startsWith("image/")||files.type.startsWith("video/")) {
         upload(files,setAppState).then(res=>{
           setLoading(true) 
           setTimeout(() => {
            
             const uploadData = {
-              url:JSON.parse(localStorage.getItem("url")),
+              url:localStorage.getItem("url"),
               description,
+              type:files.type.startsWith("image/")?"images":"video",
               dateAdded: `${month} ${day} ${time}`
             }
             push(ref(db,`uploads/`+ currentUserID),uploadData).then(res=>{
@@ -44,10 +40,10 @@ export default function Upload() {
             }).catch(err=>{
               setAppState(err.message)
             })
-          }, 8100);
+          }, 9100);
         })
       }
-      else if(!checkFileType){
+      else if(!files.type.startsWith("image/")||files.type.startsWith("video/")){
         setAppState("Invalid File Format!")
       }
 
