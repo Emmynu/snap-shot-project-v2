@@ -11,7 +11,7 @@ export default function Explore() {
   const [error,setError] = useState("")
   const [Loading,setLoading] = useState(true)
   const [Image,setImage] = useState("")
-  const searchType = localStorage.getItem("searchType")
+  const searchType =localStorage.getItem("searchType")
 
  const activeLink={
     backgroundColor:"green",
@@ -23,7 +23,7 @@ export default function Explore() {
 
  const Active={
   color:"white",
-  backgroundColor:"gray",
+  backgroundColor:"black",
   padding:"5px",
   borderRadius:"4px",
 
@@ -44,6 +44,7 @@ useEffect(()=>{
   })
 },[])
 
+// useEffect(()=>{},[searchType])
 if (Loading)return <h2 className='explore-state'>Loading...</h2>
 if (error)return <h2 className='explore-state'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
 
@@ -63,7 +64,7 @@ if (error)return <h2 className='explore-state'>{error} <span className='text-bas
         <section className='home-label'>
         <img src={Image} className='home-image'/>
           <article className='home-search'>
-            <h1 className='home-text'>The Best place to get curated pictures and videos</h1>
+            <h1 className='home-text' data-aos={`fade-right`} data-aos-duration={"3000"}>The Best place to get curated pictures and videos</h1>
 
             <div className='mt-5'>
               <section>
@@ -81,7 +82,7 @@ if (error)return <h2 className='explore-state'>{error} <span className='text-bas
                Search
               </span>
             </div>
-          </article>w
+          </article>
         </section>
       </header> 
       <article className='home-navlinks'>
