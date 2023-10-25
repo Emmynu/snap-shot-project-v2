@@ -64,6 +64,7 @@ export default function Profiles() {
     {user.length !== null ? 
     <main className="profile-container">
       {user.map(person=>{
+        // console.log(person[1].photoURL);
         return <section>
            { <img src={person[1].photoURL} className='profile-photo'/> }
             <article className='text-center mt-6'>

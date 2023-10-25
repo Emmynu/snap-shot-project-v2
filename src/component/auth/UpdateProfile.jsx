@@ -45,7 +45,7 @@ export default function UpdateProfile() {
                   if(currentUserID===user[1].id){
                     const newInfo ={
                       name,
-                      photoURL:localStorage.getItem("url"),
+                      photoURL:localStorage.getItem("url").slice(1),
                       email:user[1].email,
                       password:user[1].password,
                       id:user[1].id,
