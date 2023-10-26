@@ -1,39 +1,62 @@
 import { useEffect, useState } from "react"
-import { getAllPost } from "../../data/network"
 import { Link } from 'react-router-dom'
+import { getPosts } from "../../data/posts"
+import "../../scss/posts.css"
 
 export default function Posts() {
     const [posts,setPosts] = useState([])
+    const [sliderImage,setsliderImage] = useState([])
+    const [sliderIndex,setSliderIndex] = useState(0)
 
     useEffect(()=>{
-        getAllPost(setPosts)
+        getPosts(setPosts)
     },[])
+    // console.log(sliderImage);
 
+    function sliderIndexFunc(index) {
+        if (index>sliderImage.length-1) {
+            return 0
+        } else if(index<0){
+            return sliderImage.length-1
+        }
+        return index
+    }
 
+    function increaseSlider(sliderArray) {
+        setsliderImage(sliderArray)
+        setSliderIndex(prev=>{
+            prev= sliderIndex + 1
+            return sliderIndexFunc(prev)
+        })
+    }
+    return(
+        <main>
+            {posts.map(post=>{
+                const postContent = Object.entries(post[1])
+                return <main >
+                    {postContent.map(item=>{
+                        return <section className="posts-container">
+                            <section>
+                                <h2>{item[1].users.name}</h2>
+                                <img src={item[1].users.url}/>
+                                  
+                            </section>
+                           
+                            <section>
+                                {item[1].postDetails[sliderIndex].type==="images"? <img src={item[1].postDetails[sliderIndex].url}/>
+                                :
+                                <video><source src={item[1].postDetails[sliderIndex].url}></source></video>}
+                                <button onClick={()=>increaseSlider(item[1].postDetails,)}>next</button>
+                                </section>
 
-  return (
-    // <body>
-     <main> 
-        {posts.map(post=>{
-            return <section key={post[0]}>
-                <header>
-                    <img src={post[1]?.users?.url} alt={post[1]?.users?.id} />
-                    <h2>{post[1]?.users?.name}</h2>
-                    <h5>{post[1]?.postDetails?.tag}</h5>
-                </header>
-                <Link  to={`/posts/${post[0]}`}>
-                <article>
-                    <h1>{post[1]?.postDetails?.text}</h1>
-                    <img src={post[1]?.postDetails?.url} alt={post[0]} />
-                    <div>
-                        <h2>{post[1].likes}</h2>
-                        <h2>{post[1].comments}</h2>
-                    </div>
-                </article>
-                </Link>
-            </section>
-      })}
-      </main>
-    // </body>
-  )
+                             <footer className="post-footer">
+                                <h2>Likes {item[1].likes}</h2>
+                                <h2>Comments {item[1].comments}</h2>
+                            </footer>
+                        </section>
+                    })}
+                </main>
+            })}
+        </main>
+    )
 }

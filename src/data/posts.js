@@ -21,3 +21,10 @@ export async function createNewPost(postDetails) {
   })
 }
 
+
+export async function getPosts(postContainer) {
+  const postRef=ref(db,`posts/`)
+  onValue(postRef,res=>{
+    res.val() !==null ? postContainer(Object.entries(res.val())) :postContainer([])
+  })
+}
