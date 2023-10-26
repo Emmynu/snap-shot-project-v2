@@ -1,4 +1,4 @@
-import { useId, useState } from "react"
+import { useEffect, useId, useState } from "react"
 import { upload } from "../../data/upload"
 import { createNewPost } from "../../data/posts"
 import { Link } from "react-router-dom"
@@ -10,7 +10,7 @@ export default function NewPost() {
   const [text,setText] = useState("")
   const [selectedFiles,setselectedFiles] = useState(null)
   const [filesUrl,setfilesUrl] = useState([])
-
+  const [success,setSuccess] = useState(false)
 
   const handleFileChange = (e)=>{
     const files=e.target.files
@@ -29,24 +29,23 @@ export default function NewPost() {
         return [...prev,{url,type,text}]
       })
       
-     await createNewPost(filesUrl)     
+     await setSuccess(true)  
     }
-  //   if (filesUrl.length===selectedFiles.length) {
-  //     createNewPost(filesUrl)
-  //     console.log("heyy");
-  //  }
+
   }
 
-   function saveToDb() {
-    if (filesUrl.length===selectedFiles.length) {
-       createNewPost(filesUrl)
-       console.log("heyy");
-    }
-  }
+
+
+  useEffect(()=>{
+    if (success && filesUrl.length===selectedFiles.length) {
+      createNewPost(filesUrl)
+    } 
+  },[filesUrl])
+
+
   return (
 
     <main>
-      {/* <h2>{uploadState}</h2> */}
       <form>
         <article>
           <textarea name="text" id={`text${useId}`} cols="30" rows="10" value={text} onChange={(e)=>setText(e.target.value)}></textarea>
@@ -57,11 +56,7 @@ export default function NewPost() {
         </article>
 
         <button onClick={createPost}>Create Post</button><br/>
-        {/* <span>
-         {filesUrl.map(url=>{
-          return <img src={url.url}/>
-         })}
-        </span> */}
+       
       </form>
     </main>
   )

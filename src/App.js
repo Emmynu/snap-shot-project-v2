@@ -20,6 +20,7 @@ import Search from './component/Main/Search'
 import UpdateProfile from './component/auth/UpdateProfile'
 import Profiles from './component/auth/Profiles'
 import NewPost from './component/Posts/NewPost'
+import Posts from './component/Posts/Posts'
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Route path='upload' element={<Upload/>}/>
 
       <Route path='new-post' element={<NewPost/>}/>
+      <Route path="posts" element={<Posts/>}/>
      </Route>
 
      <Route path='*' element={<PageNotFound />}/>
