@@ -1,4 +1,14 @@
 $shadowOne: 3px 8px 12px rgba(228, 224, 224, 0.5);
+@mixin display($postion){
+    display: flex;
+    align-items: center;
+    justify-content:$postion;
+}
+@mixin tinyText($size){
+    font-size: $size;
+    color: gray;
+    letter-spacing: 1px;
+}
 main{
     margin: 10px ;
     .posts-container{
@@ -7,24 +17,50 @@ main{
         padding: 20px;
         margin-top: 20px;
         border-radius: 4px;
+        .post-profile-cotainer{
+            @include display(none);
+           & div{
+            width: 50px;
+            height: 50px;
+            img{
+                width: 100%;
+                border-radius: 50%;
+                aspect-ratio: 1;
+                // margin-right: 3px
+            }
+           }
+           & section p{
+            @include tinyText(13px)
+           }
+           & section h2{
+            letter-spacing: 1px;
+            // font-weight: 600;
+            font-family: Arial, Helvetica, sans-serif;
+           }
+        }
+        
     }
     .post-footer{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+       @include display(space-between);
         margin-top: 20px;
         border-top: 2px solid rgb(245, 245, 245);
         padding-top: 5px;
         h2{
-            font-size: 14px;
-            color: gray;
-            letter-spacing: 1px;
+            @include tinyText(14px)
         }
     }
+    // .post-footer-2{
+    //     @extend .post-footer;
+    //     @include display(space-evenly)
+    // }
 }
 
 @media (max-width:800px) {
     main{
-        margin: 3px;
+        margin: 5px;
+    }
+    .post-profile-cotainer div{
+        width: 30px;
+        height: 30px;
     }
 }
