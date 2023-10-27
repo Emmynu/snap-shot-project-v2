@@ -28,3 +28,11 @@ export async function getPosts(postContainer) {
     res.val() !==null ? postContainer(Object.entries(res.val())) :postContainer([])
   })
 }
+
+
+export async function getSinglePosts(id,postId,postContainer){
+  const postRef = ref(db,`posts/${id}/${postId}`)
+  onValue(postRef,result=>{
+    result.val() !==null? postContainer(result.val()) : postContainer([])
+  })
+}

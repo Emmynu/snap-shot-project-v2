@@ -21,6 +21,7 @@ import UpdateProfile from './component/auth/UpdateProfile'
 import Profiles from './component/auth/Profiles'
 import NewPost from './component/Posts/NewPost'
 import Posts from './component/Posts/Posts'
+import PostDetailed from './component/Posts/Post-detailed'
 
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
 
       <Route path='new-post' element={<NewPost/>}/>
       <Route path="posts" element={<Posts/>}/>
+      <Route path="posts/:userId/:postId" element={<PostDetailed/>}/>
      </Route>
 
      <Route path='*' element={<PageNotFound />}/>
