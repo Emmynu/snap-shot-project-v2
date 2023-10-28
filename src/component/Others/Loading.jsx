@@ -37,3 +37,7 @@ export function LoadProfile(){
   </section>
  </main>
 }
+
+export function LoadPost() {
+  return<h2>Loading...</h2>
+}
