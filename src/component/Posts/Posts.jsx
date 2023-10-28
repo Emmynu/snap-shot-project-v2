@@ -1,77 +1,78 @@
-import { useEffect, useState } from "react"
+import {  useState } from "react"
 import { Link } from 'react-router-dom'
-import { getPosts } from "../../data/posts"
 import "../../scss/posts.css"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import HoverVideoPlayer from "react-hover-video-player"
+import { LoadPost } from "../Others/Loading"
+import { onSnapshot, query, collection, orderBy } from "firebase/firestore"
+import { firestore } from "../../firebase/firebase-config"
 
 export default function Posts() {
     const [posts,setPosts] = useState([])
- 
+    const [isLoading, setIsLoading] = useState(false)
 
-    useEffect(()=>{
-        getPosts(setPosts)
-    },[])
 
-    const settings={
 
-        dots:true,
-        infinite:true,
-        speed:700,
-        slidesToshow:1,
-        slidesToscroll:1,
-        autoplay:true,
-        pauseOnHover:true
-    }
+const postRef = query(collection(firestore, "posts/"),orderBy("createdAt"))
+onSnapshot(postRef,(snapshot)=>{
+    const post = []
+    snapshot.forEach((data)=>{
+       post.push({
+        ...data.data(),id:data.id
+       })
+        setPosts(post)
+    })
+})
 
-   
+
+    console.log(posts);
+const settings={
+    dots:true,
+    infinite:true,
+    speed:700,
+    slidesToshow:1,
+    slidesToscroll:1,
+}
+
     return(
         <main>
-            {posts.map(post=>{
-                const postContent = Object.entries(post[1])
-                return <main >
-                    {postContent.map(item=>{
-                        console.log(item);
-                        // console.log(item[1].users);
-                        return <section className="posts-container">
-                            <Link to={`/profile/${item[1].users.id}`}>
-                            <section className="post-profile-cotainer">
-                                <div>
-                                    <img src={item[1].users.url.slice(1)}/>
-                                </div>
-                                <section className="ml-3">
-                                    <h2 className="text-slate-700 font-bold">{`${item[1].users.name.charAt(0).toUpperCase()}${item[1].users.name.slice(1)}`}</h2>
-                                    <p>2 minutes ago</p>
-                                </section>
+            {isLoading ? <LoadPost/> : 
+            posts.map(post=>{
+                return <section className="posts-container">
+                      <Link to={`/profile/${post.users.id}`}>
+                        <section className="post-profile-cotainer">
+                            <div>
+                                <img src={post.users.url.slice(1)}/>
+                            </div>
+                            <section className="ml-3">
+                                <h2 className="text-slate-700 font-bold">{`${post.users.name.charAt(0).toUpperCase()}${post.users.name.slice(1)}`}</h2>
+                                
                             </section>
-                           </Link>
-                           <Link to={`/posts/${post[0]}/${item[0]}`}>
-                            <section>
-                            <Slider {...settings}> 
-
-                                {item[1].postDetails.map((post)=>{
-                                    // console.log(post);
-                                    return <main className="posts-content-container w-full">
-                                        {post.type==="images"? 
-                                            <img src={post.url} className="w-full"/>
-                                            :
-                                            <HoverVideoPlayer videoSrc={post.url}/>}
-                                        </main>
-                                })}
-                                </Slider>
-                            </section>
-
-                             <footer className="post-footer">
-                                <h2>Likes {item[1].likes}</h2>
-                                <h2>Comments {item[1].comments}</h2>
-                            </footer>
-
-                            </Link>
                         </section>
-                    })}
-                </main>
+                    </Link>
+                    <Link>
+                    <section className="posts-content-container">
+                        <Slider {...settings}>
+                        {post.postDetails.map((data)=>{
+                            return <main className="posts-content-container w-full">
+                                <h2>{data.text}</h2>
+                                {data.type==="images"? 
+                                    <img src={data.url} className="w-full"/>
+                                    :
+                                    <HoverVideoPlayer videoSrc={data.url} className="w-full"/>}
+                                </main>
+                                })}
+                        </Slider>
+                    </section>
+
+                    <footer className="post-footer">
+                        <h2>Likes 0</h2>
+                        <h2>Comments 0</h2>
+                    </footer>
+                    </Link>
+                </section>
             })}
         </main>
     )
