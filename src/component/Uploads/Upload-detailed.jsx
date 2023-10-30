@@ -3,7 +3,9 @@ import { useParams,Link } from  "react-router-dom"
 import { deleteUpload,getSingleUpload } from '../../data/uploads'
 import "../../css/network/uploads.css"
 import loadingImage from "../../images/loading.png"
-import { createNewPost } from '../../data/posts'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../firebase/firebase-config'
+import { savePost } from '../../data/posts'
 
 
 export default function UploadDetailed() {
@@ -24,16 +26,28 @@ export default function UploadDetailed() {
     }
 
     function createPost(){
-        const postInfo={
-            text:upload?.description,
-            url:upload?.url,
-            tag:"tag"
+        onAuthStateChanged(auth, user=>{
+            const postInfo={
+                postDetails:[
+                    {
+                    text:upload?.description,
+                    url:upload?.url.slice(1),
+                }
+                ],
+            users:{
+                email:user?.email,
+                url:user?.photoURL,
+                name:user?.displayName,
+                id:user?.uid
+            },
+            likes:0,
+            comments:0,
+            createdAt: new Date().getTime()
         }
-        createNewPost(postInfo).then(res=>{
-            seterr("Upload Sucessful");
-            setLoading(false)
-        }).catch(err=>seterr(err.message))
-
+        savePost(postInfo)
+        .then(window.location = "/posts")
+        .catch(err=>seterr(err.message))
+        })
        setTimeout(() => {
          seterr(null)
        }, 2000);

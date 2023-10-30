@@ -4,22 +4,8 @@ import {onValue, orderByChild, push, query, ref} from "firebase/database";
 // import { serverTimestamp } from "firebase/firestore";
 import { currentUserID } from "./users";
 
-export async function createNewPost(postDetails) {
-  onAuthStateChanged(auth,user=>{
-    const post ={
-        postDetails,
-        users:{
-            email:user?.email,
-            url:user?.photoURL,
-            name:user?.displayName,
-            id:user?.uid
-        },
-        likes:0,
-        comments:0,
-        createdAt: new Date().getTime()
-    }
-    push(ref(db,`posts/${currentUserID}/`),post)
-  })
+export async function savePost(data){
+  push(ref(db, "posts/"),data)
 }
 
 
@@ -32,6 +18,13 @@ export async function getPosts(postContainer, loading) {
   })
 }
 
+export async function getPostComments(id,commentContainer) {
+  const postRef= ref(db,`posts/${id}/commentedBy`)
+  onValue(postRef,res=>{
+    res.val() !==null ? commentContainer(Object.entries(res.val())) :commentContainer([])
+    // loading(false)
+  })
+}
 
 export async function getSinglePosts(postId,postContainer){
   const postRef = ref(db,`posts/${postId}`)
