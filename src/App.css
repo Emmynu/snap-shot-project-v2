@@ -4,7 +4,7 @@
 
 @layer base{
     ::selection{
-        @apply bg-green-600 text-slate-50
+        @apply bg-green-500 text-slate-50
     }
    
 }
