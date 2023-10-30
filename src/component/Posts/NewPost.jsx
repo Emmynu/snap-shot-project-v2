@@ -1,9 +1,11 @@
 import { useEffect, useId, useState } from "react"
 import  LoadingIcon from "../../images/loading.png"
-import { createNewPost } from "../../data/posts"
+import { onAuthStateChanged } from "firebase/auth";
+// import {  } from "../../firebase/firebase-config";
 import { Link, useNavigate } from "react-router-dom"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
-import { storage } from "../../firebase/firebase-config"
+import { storage,auth } from "../../firebase/firebase-config"
+import { savePost } from "../../data/posts";
 
 export default function NewPost() {
   const [text,setText] = useState("")
@@ -14,14 +16,18 @@ export default function NewPost() {
   const [completed, setCompleted] = useState(false)
   const navigate = useNavigate()
 
+
+  function handleFiles(e) {
+    const files = e.target.files
+    setFiles([...files])
+  }
+
   const createPost = async (e) =>{
     e.preventDefault()
-    setCompleted(true)
     if(files !== null){
-      // files.type.startsWith("image/")||files.type.startsWith("video/")
      for (let i = 0; i < files.length; i++) {
+      setCompleted(true)
       const element = files[i];
-      console.log(element);
       const storageBucketRef = ref(storage, `postBucket/${element.name}`)
       const result = await uploadBytes(storageBucketRef, element)
       const url = await getDownloadURL(storageBucketRef)
@@ -29,21 +35,39 @@ export default function NewPost() {
       setFileData(prev=>{
         return [...prev, {url, type, text}]
       })
-     await setSuccess(true)
+      setSuccess(true)
+
      }
     }else{
       setUploadState("Fill out all fields")
     }
   }
-
   useEffect(()=>{
-    if (success&& files.length === fileData.length) {
-      createNewPost(fileData).then(res=>{
-        navigate("/posts")
+
+    if (success && files.length === fileData.length) {
+      onAuthStateChanged(auth,user=>{
+        const post ={
+            postDetails:fileData,
+            users:{
+                email:user?.email,
+                url:user?.photoURL,
+                name:user?.displayName,
+                id:user?.uid
+            },
+            likes:0,
+            comments:0,
+            createdAt: new Date().getTime()
+        }
+      savePost(post).then(res=>{
+        setUploadState("New Post Added")
         setCompleted(false)
+        navigate("/posts")
       })
+      })
+      console.log("saved");
     }
-  },[])
+  },[fileData.length === files?.length])
+
 
 
   return (
@@ -65,13 +89,11 @@ export default function NewPost() {
         </article>
 
         <article  className='upload-form-container'>
-          <input type="file" name="file" id={`file${useId}`} multiple onChange={(e)=>setFiles(e.target.files)}/>
+          <input type="file" name="file" id={`file${useId}`} multiple onChange={handleFiles}/>
         </article>
 
-      { completed ? <img src={LoadingIcon} className="animate-spin w-7"/> :<> <button onClick={createPost}  className='upload-butn'>Create Post</button><br/></>}
-        <span>
-          <Link to={`/posts`}>view post</Link>
-        </span>
+     {completed ? <img src={LoadingIcon} className="w-7 animate-spin"/>: <> <button onClick={createPost}  className='upload-butn'>Create Post</button><br/></>}
+        
       </form>
     </main>
   )

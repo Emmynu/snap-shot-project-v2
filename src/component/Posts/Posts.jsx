@@ -27,6 +27,9 @@ export default function Posts() {
 
 
     {return isLoading ? <LoadPost/> :  <main>
+        <header>
+            <Link to={`/new-post`}>Add to New Post</Link>
+        </header>
         {posts.map(post=>{
             console.log(post);
             
