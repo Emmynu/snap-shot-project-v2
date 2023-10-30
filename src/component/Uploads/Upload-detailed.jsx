@@ -3,7 +3,7 @@ import { useParams,Link } from  "react-router-dom"
 import { deleteUpload,getSingleUpload } from '../../data/uploads'
 import "../../css/network/uploads.css"
 import loadingImage from "../../images/loading.png"
-import { createNewPost } from '../../data/network'
+import { createNewPost } from '../../data/posts'
 
 
 export default function UploadDetailed() {

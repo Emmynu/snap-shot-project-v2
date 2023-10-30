@@ -10,7 +10,7 @@ import { db } from "../../firebase/firebase-config"
 import { currentUser, getUsers } from "../../data/users"
 
 export default function PostDetailed() {
-    const { postId } = useParams()
+    const { postId,userId } = useParams()
     const [post,setPost] = useState([])
     const [postLikes,setPostLikes] = useState([])
     const [user,setuser] = useState([])
