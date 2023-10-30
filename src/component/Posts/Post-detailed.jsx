@@ -1,7 +1,7 @@
 import  { useParams } from "react-router-dom"
-import { getPost, getPostLikes } from "../../data/network"
 import { useEffect, useState } from "react"
 import { currentUserID } from "../../data/users"
+import { getSinglePosts } from "../../data/posts"
 
 export default function PostDetailed() {
     const { postId } = useParams()
@@ -12,30 +12,12 @@ export default function PostDetailed() {
         getPost(postId,setPost)
         getPostLikes(postId,setPostLikes)
     },[])
+  
+    console.log(post);
 
-   function likePost() {
-    postLikes.map(like=>{
-        if (like[1].likedBy.id===currentUserID) {
-            console.log(`liked`);
-        } else {
-            console.log(`not liked`);
-        }
-    })
-   }
-
-  return (
-    <main>
-      <section>
-        <h2>{post?.postDetails?.text}</h2>
-        <h6>{post?.postDetails?.tag}</h6>
-        <img src={post?.postDetails?.url}/>
-      </section>
-      <footer>
-        <h2>{post?.likes}</h2>
-        <h2>{post?.comments}</h2>
-
-        <section onClick={likePost}>Like</section>
-      </footer>
-    </main>
-  )
+    return(
+      <main>
+        
+      </main>
+    )
 }
