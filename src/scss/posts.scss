@@ -49,10 +49,6 @@ main{
             @include tinyText(14px)
         }
     }
-    // .post-footer-2{
-    //     @extend .post-footer;
-    //     @include display(space-evenly)
-    // }
 }
 
 @media (max-width:800px) {

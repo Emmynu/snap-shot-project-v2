@@ -19,6 +19,9 @@ import PageNotFound from './component/404-Page/PageNotFound'
 import Search from './component/Main/Search'
 import UpdateProfile from './component/auth/UpdateProfile'
 import Profiles from './component/auth/Profiles'
+import Posts from './component/Posts/Posts'
+import PostDetailed from './component/Posts/Post-detailed'
+import NewPost from './component/Posts/NewPost'
 
 
 function App() {
@@ -50,6 +53,9 @@ function App() {
       <Route path='profile/:userId' element={<Profiles />}/>
       <Route path='update-profile' element={<UpdateProfile />}/>
       <Route path='upload' element={<Upload/>}/>
+      <Route path="new-post" element={<NewPost/>} />
+      <Route  path='posts' element={<Posts/>}/>
+      <Route  path='posts/:postId' element={<PostDetailed/>}/>
      </Route>
 
      <Route path='*' element={<PageNotFound />}/>

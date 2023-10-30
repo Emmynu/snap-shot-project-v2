@@ -32,7 +32,7 @@ export default function Uploads() {
       <section className='ml-2 my-2 md:ml-5 lg:ml-10'>
         <span className=' upload-keys text-slate-100'><Link to={``}>All</Link></span>
         <span className=' upload-keys text-slate-100'><Link to={`?type=images`}>Images</Link></span>
-        <span className=' upload-keys text-slate-100'><Link to={`?type=videos`}>Videos</Link></span>
+        <span className=' upload-keys text-slate-100'><Link to={`?type=video`}>Videos</Link></span>
       </section>
       {<section className='mt-4'>
       {isLoading?<Loading/>:uploads.length > 0 ?
@@ -42,7 +42,7 @@ export default function Uploads() {
                 <article>
                     <Link to={`/uploads/${upload[0]}`}>
                    {upload[1].type=== "images"? <img src={upload[1].url.slice(1)} alt={upload[0]}  className='photo-image'/> : 
-                   <HoverVideoPlayer videoSrc={upload[1].url.slice(1)} className='photo-image'/>
+                   <HoverVideoPlayer muted={false} videoSrc={upload[1].url.slice(1)} className='photo-image'/>
                    }   
                     </Link>
                     {/* <button></button> */}

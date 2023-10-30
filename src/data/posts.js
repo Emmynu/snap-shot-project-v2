@@ -1,6 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase/firebase-config";
-import {onValue, push, ref} from "firebase/database";
+import {onValue, orderByChild, push, query, ref} from "firebase/database";
+// import { serverTimestamp } from "firebase/firestore";
 import { currentUserID } from "./users";
 
 export async function createNewPost(postDetails) {
@@ -14,24 +15,26 @@ export async function createNewPost(postDetails) {
             id:user?.uid
         },
         likes:0,
-        comments:0
+        comments:0,
+        createdAt: new Date().getTime()
     }
-    console.log(post)
     push(ref(db,`posts/${currentUserID}/`),post)
   })
 }
 
 
-export async function getPosts(postContainer) {
-  const postRef=ref(db,`posts/`)
+export async function getPosts(postContainer, loading) {
+  loading(true)
+  const postRef= query(ref(db,`posts/`),orderByChild("createdAt"))
   onValue(postRef,res=>{
     res.val() !==null ? postContainer(Object.entries(res.val())) :postContainer([])
+    loading(false)
   })
 }
 
 
-export async function getSinglePosts(id,postId,postContainer){
-  const postRef = ref(db,`posts/${id}/${postId}`)
+export async function getSinglePosts(postId,postContainer){
+  const postRef = ref(db,`posts/${postId}`)
   onValue(postRef,result=>{
     result.val() !==null? postContainer(result.val()) : postContainer([])
   })

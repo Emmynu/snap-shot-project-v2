@@ -23,7 +23,7 @@ export default function Explore() {
 
  const Active={
   color:"white",
-  backgroundColor:"gray",
+  backgroundColor:"#000",
   padding:"5px",
   borderRadius:"4px",
 

@@ -1,50 +1,74 @@
-import { useId, useState } from "react"
-import { upload } from "../../data/upload"
+import { useEffect, useId, useState } from "react"
+import  LoadingIcon from "../../images/loading.png"
 import { createNewPost } from "../../data/network"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { storage } from "../../firebase/firebase-config"
 
 export default function NewPost() {
   const [text,setText] = useState("")
-  const [file,setFile] = useState(null)
+  const [files,setFiles] = useState(null)
   const [uploadState,setUploadState] = useState("")
+  const [fileData, setFileData] = useState([])
+  const [success, setSuccess] = useState(false)
+  const [completed, setCompleted] = useState(false)
+  const navigate = useNavigate()
 
-  const createPost = (e) =>{
+  const createPost = async (e) =>{
     e.preventDefault()
-    if(file !== null){
-      if (file.type === "image/jpeg"||file.type==="image/jpg"||file.type==="image/png") {
-        upload(file,setUploadState).then(res=>{
-         setTimeout(() => {
-           const postInfo ={
-             text,
-             url:JSON.parse(localStorage.getItem("url")),
-             tag:"tag"
-           }
-          createNewPost(postInfo).then(res=>{
-            setUploadState("Post Added")
-          }).catch(err=>setUploadState(err.message))
-         }, 8100);
-        })
-      }else{
-        setUploadState("Invalid File Format")
-      }
+    setCompleted(true)
+    if(files !== null){
+      // files.type.startsWith("image/")||files.type.startsWith("video/")
+     for (let i = 0; i < files.length; i++) {
+      const element = files[i];
+      console.log(element);
+      const storageBucketRef = ref(storage, `postBucket/${element.name}`)
+      const result = await uploadBytes(storageBucketRef, element)
+      const url = await getDownloadURL(storageBucketRef)
+      const type  = element.type.startsWith("image/") ? "image" : "video"
+      setFileData(prev=>{
+        return [...prev, {url, type, text}]
+      })
+     await setSuccess(true)
+     }
     }else{
       setUploadState("Fill out all fields")
     }
   }
 
+  useEffect(()=>{
+    if (success&& files.length === fileData.length) {
+      createNewPost(fileData).then(res=>{
+        navigate("/posts")
+        setCompleted(false)
+      })
+    }
+  },[])
+
+
   return (
-    <main>
-      <h2>{uploadState}</h2>
-      <form>
-        <article>
-          <textarea name="text" id={`text${useId}`} cols="30" rows="10" value={text} onChange={(e)=>setText(e.target.value)}></textarea>
+    <main  className='upload-container border-t'>
+       <section className='upload-header'>
+        <h2>New Post</h2>
+        <span >
+          <Link to={-1}>Discard</Link>
+        </span>
+      </section>
+
+      <article className='error-container'>
+           <h2>{uploadState}</h2>
+      </article>
+      
+      <form className='mt-5'>
+        <article  className='upload-form-container'>
+          <textarea name="text" id={`text${useId}`} cols="30" placeholder="Description..." rows="10" value={text} onChange={(e)=>setText(e.target.value)}></textarea>
         </article>
 
-        <article>
-          <input type="file" name="file" id={`file${useId}`} onChange={(e)=>setFile(e.target.files[0])}/>
+        <article  className='upload-form-container'>
+          <input type="file" name="file" id={`file${useId}`} multiple onChange={(e)=>setFiles(e.target.files)}/>
         </article>
 
-        <button onClick={createPost}>Create Post</button><br/>
+      { completed ? <img src={LoadingIcon} className="animate-spin w-7"/> :<> <button onClick={createPost}  className='upload-butn'>Create Post</button><br/></>}
         <span>
           <Link to={`/posts`}>view post</Link>
         </span>

@@ -62,7 +62,7 @@ export default function Upload() {
     <main className='upload-container border-t'>
 
       <section className='upload-header'>
-        <h2>Upload Pictures</h2>
+        <h2>Upload Files</h2>
         <span >
           <Link to={-1}>Discard</Link>
         </span>
