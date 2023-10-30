@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react"
 import  LoadingIcon from "../../images/loading.png"
-import { createNewPost } from "../../data/network"
+import { createNewPost } from "../../data/posts"
 import { Link, useNavigate } from "react-router-dom"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../../firebase/firebase-config"

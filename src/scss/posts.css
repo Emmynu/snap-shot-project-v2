@@ -1,69 +1,40 @@
 main {
   margin: 10px; }
-<<<<<<< HEAD
-  main .posts-container {
+  main sass
+  .posts-container {
     background-color: white;
     box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5);
-=======
-  main .post-header {
-    display: flex;
-    align-items: center;
-    justify-content: none;
-    box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5);
-    padding: 10px;
-    margin-left: 20px;
-    margin-right: 20px; }
-    main .post-header img {
-      width: 50px;
-      height: 50px;
-      aspect-ratio: 1;
-      border-radius: 50%; }
-    main .post-header h2 {
-      font-size: 14px;
-      color: gray;
-      letter-spacing: 1px; }
-  main .posts-container {
-    background-color: white;
-    box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5);
-    border-top: 1px solid #dadada;
->>>>>>> 839162772d72cb7719d4d4f4b01274d1c0eab531
     padding: 20px;
     margin-top: 20px;
     border-radius: 4px; }
-    main .posts-container .post-profile-cotainer {
+    main sass
+    .posts-container .post-profile-cotainer {
       display: flex;
       align-items: center;
       justify-content: none; }
-      main .posts-container .post-profile-cotainer div {
+      main sass
+      .posts-container .post-profile-cotainer div {
         width: 50px;
         height: 50px; }
-        main .posts-container .post-profile-cotainer div img {
+        main sass
+        .posts-container .post-profile-cotainer div img {
           width: 100%;
           border-radius: 50%;
           aspect-ratio: 1; }
-      main .posts-container .post-profile-cotainer section p {
+      main sass
+      .posts-container .post-profile-cotainer section p {
         font-size: 13px;
         color: gray;
         letter-spacing: 1px; }
-      main .posts-container .post-profile-cotainer section h2 {
+      main sass
+      .posts-container .post-profile-cotainer section h2 {
         letter-spacing: 1px;
         font-family: Arial, Helvetica, sans-serif; }
-<<<<<<< HEAD
-=======
-    main .posts-container .posts-content-container img {
-      width: 100%;
-      object-position: center;
-      object-fit: cover; }
->>>>>>> 839162772d72cb7719d4d4f4b01274d1c0eab531
   main .post-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-<<<<<<< HEAD
     margin-top: 20px;
-=======
-    margin-top: 30px;
->>>>>>> 839162772d72cb7719d4d4f4b01274d1c0eab531
     border-top: 2px solid whitesmoke;
     padding-top: 5px; }
     main .post-footer h2 {
@@ -77,13 +48,6 @@ main {
 
   .post-profile-cotainer div {
     width: 30px;
-<<<<<<< HEAD
     height: 30px; } }
-=======
-    height: 30px; }
-
-  .posts-content-container img {
-    height: 50vh; } }
->>>>>>> 839162772d72cb7719d4d4f4b01274d1c0eab531
 
 /*# sourceMappingURL=posts.css.map */
