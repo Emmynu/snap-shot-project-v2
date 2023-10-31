@@ -39,8 +39,37 @@ export function LoadProfile(){
 }
 
 
-export function LoadPost(){
-  return(
-    <h2>Loading...</h2>
-  )
+
+
+export function LoadPost() {
+  return <main  className=" bg-white shadow-md shadow-slate-200 p-3  w-full md:w-11/12" style={{margin: "5% auto 0"}}>
+    <header className="flex items-center">
+      <section>
+        <Skeleton borderRadius={100} style={{aspectRatio:"1"}} width={80}/>
+      </section>
+
+      <section className="ml-3 w-full">
+        <Skeleton count={2}  height={10}  style={{width:"100%"}}/>
+      </section>
+    </header>
+
+  <main className="w-full mb-2">
+    <Skeleton style={{width:"95%"}} height={300}/>
+  </main>
+
+  <footer className="border-t border-slate-400 flex justify-between items-center">
+    <section className="w-full  mt-2">
+       <Skeleton  height={14}  style={{width:"50%"}}/>
+    </section>
+
+    <section className="w-full mt-2">
+     <Skeleton  height={14}  style={{width:"50%"}}/>
+    </section>
+
+    <section className="w-full mt-2">
+     <Skeleton  height={14}  style={{width:"50%"}}/>
+    </section>
+    
+  </footer>
+  </main>
 }

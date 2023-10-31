@@ -22,13 +22,14 @@ export async function getPostComments(id,commentContainer) {
   const postRef= ref(db,`posts/${id}/commentedBy`)
   onValue(postRef,res=>{
     res.val() !==null ? commentContainer(Object.entries(res.val())) :commentContainer([])
-    // loading(false)
   })
 }
 
-export async function getSinglePosts(postId,postContainer){
+export async function getSinglePosts(postId,postContainer,loading){
+  loading(true)
   const postRef = ref(db,`posts/${postId}`)
   onValue(postRef,result=>{
     result.val() !==null? postContainer(result.val()) : postContainer([])
+    loading(false)
   })
 }
