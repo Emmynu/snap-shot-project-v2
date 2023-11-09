@@ -153,7 +153,7 @@ export default function PostDetailed() {
 
 
    {return post !== null && <div className="post-detailed-container w-full md:w-11/12"><main className="w-full">
-      <Link to={`/profile/${post?.users?.id}`}>
+      <Link to={`/profile/${post?.users?.id}`  }>
       <section className="profile-detailed-container">
         <div className="profile-img-container">
           <img src={post?.users?.url.slice(1)}/>
@@ -219,7 +219,7 @@ export default function PostDetailed() {
                   <p>{cmt.text}</p> 
                 </div>
               </div>
-              </Link>
+              </Link> 
 
              {cmt?.commentedBy?.id === user?.uid && <div className="text-2xl font-bold text-green-600" onClick={()=>commentFunc(item[0])}>...</div>}
               </section>

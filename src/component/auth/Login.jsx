@@ -1,103 +1,64 @@
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import React,{ useState } from 'react'
-import { NavLink,useNavigate } from 'react-router-dom';
+import { useState } from 'react'
+import { Link, Form, useActionData, useNavigation, redirect } from 'react-router-dom';
 import { auth } from '../../firebase/firebase-config'
 import loadingImage from "../../images/loading.png";
 import "../../css/auth/auth.css"
-import { useFetch } from '../../hooks/useFetch';
 
+
+export async function loginAction({ request }) {
+ const formdata = await request.formData()
+ const data = Object.fromEntries(formdata)
+ const values = Object.values(data)
+ if(values.includes("")){
+  return "Fill out all fields"
+ }
+ else{
+  try {
+    const user = await signInWithEmailAndPassword(auth,data.email,data.password)
+    console.log(user);
+    window.location = "/"
+  } catch (error) {
+    return error.message
+  }
+ }
+ return null
+}
 
 export default function Login() {
-    const [handleInput, setHandleInput] = useState({
-        email:"",
-        password:"",
-      })
-    const [authState, setAuthState] = useState({
-        isLoading: false,
-        errMessage:null
-      })
-     const navigate = useNavigate()
 
-      const active={
-        textDecoration:"underline"
-      }
-
-    // control inputs 
-    function handleUserInput(e){
-    const {name,value} = e.target
-    setHandleInput(prev=>{
-        return {...prev, [name]:value}
-    })
-    }
-    // fetch image
-    const { data } = useFetch()
-
-    function handleLogin(e){
-        e.preventDefault()
-        setAuthState({isLoading:true,errMessage:null})
-        const { email, password } = handleInput
-
-        email.length > 0 ?
-        signInWithEmailAndPassword(auth,email,password).then(({user})=>{
-            setAuthState({isLoading:false,errMessage:null}) 
-            // save id as token
-            localStorage.setItem("access",user.uid)
-            // go to home 
-            setTimeout(() => {
-            navigate("/")
-            }, 1000);
-
-        }).catch(err=>{
-            setAuthState({isLoading:false,errMessage:err.message})
-          }) 
-          :
-         setAuthState({isLoading:false,errMessage:"Fill out all input field"})
-
-        //  close label
-         setTimeout(() => {
-          setAuthState({})
-        }, 3000);
-    }
-
+  const [isText, setIsText] = useState(false)
+  const state = useActionData()
+  const navigation = useNavigation()
     // jsx
-  return (
-    <main className='form-container mb-9'>
-        <section>
-          <img src={data?.urls?.full} className='w-full object-cover rounded-mdx object-center' style={{height:"290px"}}/>
-      </section>
-
-      <form>
-        <div className='text-center font-medium text-mdx'>
-            <span className="">
-                <NavLink style={({isActive})=>isActive?active:null} to="/register" >Register</NavLink>
-            </span>
-            <span className="ml-1">
-                <NavLink style={({isActive})=>isActive?active:null} to="/login">Login</NavLink>
-            </span>
-        </div>
-      <section>
-        <h2 className='form-header'>Log in to account </h2>
-        <h4 className='error'>{authState.errMessage}</h4>
-      </section>
-
-      <section className='input-container'>
-            <input type="email" name="email" value={handleInput.email} onChange={handleUserInput} placeholder='user@gmail.com'/>
-        </section>
-
-        <section className='input-container'>
-            <input type="password" name="password" value={handleInput.password} onChange={handleUserInput} placeholder='user123'/>
-        </section>
-
-        <div className={!authState.isLoading? "not-loading" : "loading"}>
-        {
-        !authState.isLoading ? 
-        <button onClick={handleLogin} className='register-btn'>Login</button>
-         :
-          <img src={loadingImage} alt='loading-image' className='animate-spin'/>
-       }
-      </div>
-      </form>
-      
-    </main>
-  )
+    return (
+      <Form method='post' className='form-container' replace>
+       <header className='form-header'>
+         <h2>Welcome Back!</h2>
+       </header>
+   
+   
+       <main className='form-input-container'>
+         {state && <h2 className='state'>{state}</h2>}
+         
+         <section>
+           <label htmlFor="email">Email</label><br/>
+           <input type="email" name="email" className='input' />
+         </section>
+   
+         <div>
+           <label htmlFor="password">Password</label><br/>
+          <div className='flex bg-slate-100 border border-slate-600 items-center justify-between mb-3 p-1 rounded-mdx'>{isText ? <input type="text" name="password" className='w-full bg-transparent outline-none'/> : <input type="password" name="password" className='w-full bg-transparent outline-none'/>}
+           <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>view</span> </div>
+         </div>
+   
+         {navigation.state !== "submitting" ? <button className='submit-btn'>Submit</button >: <button className='submit-btn'>Loading...</button>}
+   
+         <footer className='form-footer'>
+           <h4>Not a member? <span className='text-green-600'><Link to="/register">Register</Link></span></h4>
+         </footer>
+       </main>
+   
+      </Form>
+     )
 }

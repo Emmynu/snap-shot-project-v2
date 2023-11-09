@@ -1,82 +1,186 @@
-import { useEffect, useState } from "react"
-import { Link } from 'react-router-dom'
-import { getPosts } from "../../data/posts"
-import Slider from "react-slick"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import HoverVideoPlayer from "react-hover-video-player"
-import { LoadPost } from "../Others/Loading"
+import { useEffect, useRef, useState } from "react"
 import "../../scss/posts.css"
-import likeIcon from "../../images/like.png"
-import commentIcon from "../../images/comment.png"
+import Modal from "react-modal"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../firebase/firebase-config";
+import { getPosts, savePost } from "../../data/posts";
+import cameraIcon from "../../images/camera.png"
+import testImg from "../../images/test.jpg"
+import { currentUser } from "../../data/users";
+import Moment from "react-moment";
+import { serverTimestamp } from "firebase/database";
+
 
 export default function Posts() {
-    const [posts,setPosts] = useState([])
-    const [isLoading,setisLoading] = useState(false)
- 
+  let subtitle;
+  const [open,setIsOpen] = useState(false)
+  const [selectedFiles, setSelectedFiles] = useState([])
+  const [file, setFile] = useState(null)
+  const imageRef = useRef(null)
+  const [user, setUser] = useState(null)
+  const [error, setError] = useState("")
+  const [posts,setPosts] = useState([].reverse())
 
-    useEffect(()=>{
-        getPosts(setPosts, setisLoading)
-    },[])
 
-    const settings={
-        dots:true,
-        infinite:true,
-        speed:700,
-        slidesToshow:1,
-        slidesToscroll:1,
+  useEffect(()=>{
+    currentUser(setUser)
+  },[])
+
+  
+  useEffect(()=>{
+    getPosts(setPosts)
+  },[])
+
+
+  // console.log(posts.reverse());
+
+  function openModal(){
+    setIsOpen(true)
+    // setSelectedFiles(null)
+  }
+
+  function closeModal() {
+    setIsOpen(false)
+    setSelectedFiles(null)
+  }
+
+  function afterOpenModal(){
+    subtitle.style.color = "#fff"
+    subtitle.style.opacity = "0.5"
+  }
+
+  function handleFileUpload(e){
+    const reader = new FileReader()
+  
+    if(e.target.files[0]){
+      if(e.target.files[0].type.startsWith("image/") ){
+        setFile(e.target.files[0])
+       reader.readAsDataURL(e.target.files[0])
+      }
+      else{
+       setError("Invalid File Format");
+      }
     }
 
-    {return isLoading ? <LoadPost/> :  <main className="mt-7 mx-2 md:mx-7 lg:mx-12">
-        <header className="post-header">
-            <h2 className=" text-lg md:text-2xl font-semibold tracking-wider mb-2">Trending Uploads <sub>({posts.length})</sub></h2>
-           <span className="remove-all-btn ml-0 bg-green-600 text-white "> <Link to={`/new-post`}>Create New Post</Link></span>
-        </header>
-        <section>{posts.map(post=>{
-            console.log(posts);
-            
-            return <main className="posts-container mt-6">
-                 <Link to={`/profile/${post[1].users?.id}`}>
-                    <section className="post-profile-cotainer">
-                        <div>
-                            <img src={post[1].users?.url.slice(1)}/>
-                        </div>
-                        <section className="ml-3">
-                            <h2 className="text-slate-700 font-bold">{`${post[1].users?.name.charAt(0).toUpperCase()}${post[1].users?.name?.slice(1)}`}</h2>
-                            <p>2 minutes ago</p>
-                        </section>
+    reader.onload=(res)=>{
+      setSelectedFiles(res.target.result)
+    }
+  }
+
+
+  async function createPost(e) {
+    e.preventDefault()
+    const data = new FormData(e.currentTarget)
+    try {
+      const storageRef = ref(storage, `PostBucket/${file?.name}`)
+      await uploadBytes(storageRef, file)
+      const url = await getDownloadURL(storageRef)
+      const postData ={
+        caption:Object.fromEntries(data),
+        url,
+        time: serverTimestamp(),
+        user: {
+          id:user?.uid,
+          name:user?.displayName,
+          url:user?.photoURL
+        }
+      }
+      // console.log(postData);
+      savePost(postData)
+      await uploadBytes()
+    } catch (error) {
+     setError(error.message);
+    }
+  }
+
+
+  return (
+    <>
+      <main   className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 mx-3 mt-8 gap-7 post-container">
+        {/* side bar  */}
+      <section className="bg-green-600 post-sections hidden md:block"></section>
+       
+
+      {/* main */}
+      <section className="post-main col-span-2 post-sections overflow-scroll">
+        <main>
+          <header className="post-header">
+              <section>
+                  <h2>Socials</h2>
+              </section>
+              <section className="post-header-2">
+                  <h2 onClick={openModal}>Add</h2>
+                  <h2>Message</h2>
+                  <h2>Profile</h2>
+              </section>
+          </header>
+
+          {/* posts body */}
+          <section className="main-post-container">
+            {posts.reverse().map(post=>{
+              return(
+                <main className="mt-3">
+                  <header className="main-post-header mx-1.5 ">
+                    <img src={testImg}/>
+                    <h2 className="font-bold text-slate-800 text-base -tracking-wide ml-1.5">{post[1]?.user?.name}</h2>
+                  </header>
+                  <section className="text-sm ml-12 -mt-1.5 text-slate-600">
+                    <Moment fromNow>{post[1]?.time/10000}</Moment>
                     </section>
-                </Link>
-                <Link to={`/posts/${post[0]}`}>
-                <section className="posts-content-container ml-5">
-                <Slider {...settings}> 
-                    {post[1].postDetails?.map((item)=>{
-                        return <main className=" w-full">
-                            {item?.type==="image"? 
-                                <div >
-                                    <img src={item?.url} className="w-full h-full object-center object-cover"/>
-                                </div>
-                                :
-                                <div >
-                                    <HoverVideoPlayer videoSrc={item?.url} muted={false} style={{width:"100%",height:"100"}} />
-                                </div>}
-                            </main>
-                    })}
-                    </Slider>
-                </section>
-                <footer className="post-footer">
-                    <h2 className="flex items-center">
-                        <img src={likeIcon} className="w-4"/>
-                        <p className="ml-1">Likes {post[1]?.likes}</p>
-                    </h2>
-                    <h2 className="flex items-center">
-                        <img src={commentIcon} className="w-4"/>
-                        <p className="ml-1">Comments {post[1]?.comments}</p>
-                    </h2> 
-                </footer>
-            </Link>
-            </main>
-        })}
-        </section>
-    </main>}
+
+                    <h2 className="m-1.5 text-slate-700 tracking-wide font-medium text-sm md:text-mdx">{post[1]?.caption?.label}</h2>
+                  
+                  <section className="main-post w-[100%] h-[300px] md:h-[400px] object-cover">
+                    <img src={post[1].url} className="w-full h-full object-cover "/>
+                  </section>
+
+                </main>
+              )
+            })}
+          </section>
+      </main>
+      </section>
+
+      {/* side bar */}
+      {/* <section className="bg-purple-600 post-sections">
+        <div></div>
+        <div></div>
+      </section> */}
+      
+    </main>
+    
+    {/* modal */}
+    <Modal isOpen={open} onAfterOpen={afterOpenModal} onRequestClose={closeModal} className="w-11/12 md:w-6/12 lg:w-1/3 p-4 absolute top-40 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-green-600 outline-none rounded-mdx shadow-md">
+
+      <section className="flex flex-col justify-center">
+        <main >
+          {/* modal confif */}
+          <p ref={(_subtitle)=>(subtitle = _subtitle)}></p>
+          {/* modal content */}
+            <article>
+              {selectedFiles ?
+              
+              <div className="new-post-container">
+                  <img src={selectedFiles} className="w-full h-[250px] object-cover rounded-mdx"onClick={closeModal}/>
+              </div>
+              : 
+                <div className="text-center">
+                  <h2 onClick={()=>imageRef.current.click()} className="flex justify-center cursor-pointer">
+                    <img src={cameraIcon} alt="camera-icon" className="w-[30px]"/>
+                  </h2>
+                  <h2 className="text-center text-sm font-medium text-red-600 tracking-wider mb-2">{error}</h2>
+                    <input type="file" name="" id="" hidden ref={imageRef} accept="image/" multiple={false} onChange={handleFileUpload}/>
+                  </div>
+                }
+                <form onSubmit={createPost}  className="flex flex-col justify-center mt-4">
+                  <input type="text" name="label"maxLength={100} placeholder="Please enter your caption..." className="outline-none border-none text-center text-mdx text-slate-700 tracking-wider w-full focus:ring-0"/><br/>
+                  <button className="p-2 bg-green-600 w-full rounded-mdx text-white font-medium hover:brightness-110 disabled:bg-slate-700" >Post</button> 
+                </form>
+          </article>
+        </main>
+      </section>
+    </Modal>
+    </>
+  )
 }
+

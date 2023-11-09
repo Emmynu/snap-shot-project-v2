@@ -5,16 +5,16 @@ import {onValue, orderByChild, push, query, ref} from "firebase/database";
 import { currentUserID } from "./users";
 
 export async function savePost(data){
-  push(ref(db, "posts/"),data)
+    push(ref(db, "posts/"),data)
 }
 
 
-export async function getPosts(postContainer, loading) {
-  loading(true)
-  const postRef= query(ref(db,`posts/`),orderByChild("createdAt"))
-  onValue(postRef,res=>{
-    res.val() !==null ? postContainer(Object.entries(res.val())) :postContainer([])
-    loading(false)
+export async function getPosts(postContainer) {
+  onValue(ref(db, "posts/"),res=>{
+    if(res.val() !== null){
+      postContainer(Object.entries(res.val()))
+    }
+    else{ postContainer([])}
   })
 }
 

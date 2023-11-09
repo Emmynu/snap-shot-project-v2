@@ -6,5 +6,8 @@
     ::selection{
         @apply bg-green-500 text-slate-50
     }
+    body{
+        /* @apply bg-slate-50 */
+    }
    
 }

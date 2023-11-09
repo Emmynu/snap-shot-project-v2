@@ -1,147 +1,35 @@
-.post-header h2 {
-  font-family: Arial, Helvetica, sans-serif; }
-
-.posts-container {
+.post-container .post-sections {
+  width: 100%;
+  height: 100vh; }
+  .post-container .post-sections div {
+    background-color: blue;
+    width: 100%;
+    height: 40vh;
+    margin-top: 40px; }
+.post-container .post-main {
   background-color: white;
-  box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5);
-  border-top: 1px solid rgba(156, 152, 152, 0.5); }
-  .posts-container .post-profile-cotainer {
+  border-radius: 4px;
+  box-shadow: 3px 8px 18px rgba(222, 221, 221, 0.6); }
+  .post-container .post-main .post-header {
     display: flex;
-    align-items: center;
-    justify-content: none;
-    padding: 15px; }
-    .posts-container .post-profile-cotainer div {
-      width: 52px;
-      height: 52px; }
-      .posts-container .post-profile-cotainer div img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        aspect-ratio: 1; }
-    .posts-container .post-profile-cotainer h2 {
-      color: #181717; }
-    .posts-container .post-profile-cotainer p {
-      font-size: 13px;
-      color: gray;
-      letter-spacing: 1px;
-      margin-top: -2px; }
-  .posts-container .posts-content-container {
-    margin-top: 7px; }
-    .posts-container .posts-content-container img {
-      border-radius: 2px; }
-  .posts-container .post-footer {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    font-size: 15px;
-    color: gray;
-    letter-spacing: 1px;
-    padding: 9px 35px;
-    border-top: 1px solid rgba(156, 152, 152, 0.5);
-    margin-top: 6px; }
+    align-items: center;
+    margin: 6px; }
+    .post-container .post-main .post-header-2 {
+      display: flex;
+      justify-content: none;
+      align-items: center; }
 
-.post-detailed-container {
+.main-post-header {
   display: flex;
+  justify-content: none;
   align-items: center;
-  justify-content: center;
-  background-color: white;
-  box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5);
-  margin: 5% auto 0;
-  border-top: 2px solid whitesmoke;
-  cursor: pointer; }
-  .post-detailed-container .profile-detailed-container {
-    display: flex;
-    align-items: center;
-    justify-content: none;
-    padding: 10px; }
-    .post-detailed-container .profile-detailed-container .profile-img-container {
-      width: 50px;
-      height: 50px; }
-      .post-detailed-container .profile-detailed-container .profile-img-container img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        aspect-ratio: 1; }
-    .post-detailed-container .profile-detailed-container .profile-content-container {
-      margin-left: 7px; }
-      .post-detailed-container .profile-detailed-container .profile-content-container h2 {
-        font-size: 17px;
-        color: gray;
-        letter-spacing: 1px;
-        font-weight: 600;
-        color: #181717; }
-      .post-detailed-container .profile-detailed-container .profile-content-container p {
-        font-size: 14px;
-        color: gray;
-        letter-spacing: 1px;
-        margin-top: -3px; }
-  .post-detailed-container .post-detailed-footer-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 15px;
-    color: gray;
-    letter-spacing: 1px;
-    padding: 9px 35px;
-    border-top: 2px solid whitesmoke; }
-  .post-detailed-container .post-content {
-    margin-top: 8px;
-    width: 100%; }
-    .post-detailed-container .post-content h2 {
-      font-size: 14px;
-      color: gray;
-      letter-spacing: 1px;
-      margin-bottom: 3px; }
-  .post-detailed-container .post-comment-container {
-    display: flex;
-    align-items: center;
-    justify-content: none;
-    border-radius: 4px; }
-    .post-detailed-container .post-comment-container .post-comment-url-container {
-      width: 35px;
-      height: 35px; }
-      .post-detailed-container .post-comment-container .post-comment-url-container img {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1;
-        border-radius: 50%; }
-    .post-detailed-container .post-comment-container .post-comment-content-container {
-      margin-left: 10px;
-      margin-top: 10px; }
-      .post-detailed-container .post-comment-container .post-comment-content-container h2 {
-        font-size: 16px;
-        color: gray;
-        letter-spacing: 1px;
-        font-weight: 600;
-        color: #181717; }
-      .post-detailed-container .post-comment-container .post-comment-content-container p {
-        font-size: 14px;
-        color: gray;
-        letter-spacing: 1px;
-        margin-bottom: 7px;
-        margin-top: 1px; }
-
-.comment-options-container {
-  background-color: white;
-  padding: 10px;
-  text-align: center;
-  z-index: 40;
-  border: 2px solid whitesmoke;
-  box-shadow: 3px 8px 12px rgba(228, 224, 224, 0.5); }
-  .comment-options-container h2 {
-    border-radius: 4px;
-    font-weight: bold;
-    margin-top: 7px;
-    padding: 5px 10px; }
-  .comment-options-container button {
-    padding: 5px 10px;
-    background-color: #550303;
-    font-size: 15px;
-    color: gray;
-    letter-spacing: 1px;
-    color: white;
-    border-radius: 4px;
-    margin-top: 7px;
-    width: 100%; }
+  margin-top: 29px; }
+  .main-post-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-position: center;
+    object-fit: cover; }
 
 /*# sourceMappingURL=posts.css.map */

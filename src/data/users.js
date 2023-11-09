@@ -7,7 +7,7 @@ export const currentUserID = localStorage.getItem("access")
 
 export async function currentUser(state) {
   onAuthStateChanged(auth,user=>{
-    state(user)
+    state(user)    
   })
 }
 

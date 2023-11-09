@@ -73,7 +73,7 @@ export default function NewPost() {
   return (
     <main  className='upload-container border-t'>
        <section className='upload-header'>
-        <h2>New Post</h2>
+        <h2 className="">New Post</h2>
         <span >
           <Link to={-1}>Discard</Link>
         </span>
