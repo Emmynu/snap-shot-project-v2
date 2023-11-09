@@ -46,7 +46,10 @@
         height: 4px;
     }
     .footer{
-        @apply bg-gray-800 text-slate-50 font-medium text-center p-4
+        @apply bg-gray-800 text-slate-50 font-medium text-center 
+    }
+    .footer h2{
+        @apply pt-5
     }
 
     .small-screen-nav{

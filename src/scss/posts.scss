@@ -1,180 +1,46 @@
-$shadowOne: 3px 8px 12px rgba(228, 224, 224, 0.5);
-$shadowTwo: 59px 18px 22px rgba(60, 57, 57, 0.5);
-$border : 2px solid rgb(245, 245, 245);
-@mixin display($postion){
+@mixin display($position){
     display: flex;
+    justify-content: $position;
     align-items: center;
-    justify-content:$postion;
-}
-@mixin tinyText($size){
-    font-size: $size;
-    color: gray;
-    letter-spacing: 1px;
 }
 
-.post-header{
-    h2{
-       
-        font-family: Arial, Helvetica, sans-serif;
-        
-    }
-}
-
-.posts-container{
-    background-color: white;
-    box-shadow:$shadowOne;
-    border-top: 1px solid rgba(156, 152, 152, 0.5);
-    .post-profile-cotainer{
-        @include display(none);
-        padding: 15px;
-        div{
-            width: 52px;
-            height: 52px;
-            img{
-                width: 100%;
-                height: 100%;
-                border-radius: 50%;
-                aspect-ratio: 1;
-            }
-        }
-        h2{
-            color: #181717
-        }
-        p{
-            @include tinyText(13px);
-            margin-top: -2px;
-        }
-    }
-    .posts-content-container{
-        margin-top: 7px;
-        img{
-            border-radius: 2px
-        }
-    }
-    .post-footer{
-        @include display(space-between);
-        @include tinyText(15px);
-        padding: 9px 35px;
-        border-top: 1px solid rgba(156, 152, 152, 0.5);
-        margin-top: 6px;
-    }
-}
-
-// post detailed
-
-.post-detailed-container{
-    @include display(center);
-    background-color: white;
-    box-shadow: $shadowOne;
-    margin: 5% auto 0;
-    border-top: $border;
-    cursor: pointer;
-    
-    .profile-detailed-container{
-        @include display(none);
-        padding: 10px;
-        .profile-img-container{
-           width: 50px;
-           height: 50px;
-    
-           img{
-            width: 100%;
-            height: 100%;
-            // border: 10px solid red;
-            border-radius: 50%;
-            aspect-ratio: 1;
-           }
-        }
-        .profile-content-container{
-            margin-left: 7px;
-            h2{
-                @include  tinyText(17px);
-                font-weight: 600;
-                color: #181717;
-            }
-            p{
-                @include tinyText(14px);
-                margin-top: -3px;
-            }
-           }
-    }
-    .post-detailed-footer-container{
-        @include display(space-between);
-        @include tinyText(15px);
-        padding: 9px 35px;
-        border-top: $border;
-    }
-    // .child-2{
-    //    @include display(space-between)
-    // }
-    .post-content{
-        margin-top: 8px;
+.post-container{
+    .post-sections{
         width: 100%;
-        h2{
-            @include tinyText(14px);
-            margin-bottom: 3px;
+        height: 100vh;
+        
+        div{
+            background-color: blue;
+            width: 100%;
+            height: 40vh;
+            // height: 50%;
+            margin-top: 40px;
         }
     }
-    .post-comment-container{
-        @include display(none);
-       
+    .post-main{
+        background-color: white;
         border-radius: 4px;
-        // box-shadow: $shadowOne;
-        .post-comment-url-container{
-            width: 35px;
-            height: 35px;
-            img{
-                width: 100%;
-                height: 100%;
-                aspect-ratio: 1;
-                border-radius: 50%;
+        box-shadow: 3px 8px 18px rgba(222, 221, 221, 0.6);
+        .post-header{
+            @include display(space-between);
+            margin: 6px;
+            &-2{
+                @include display(none)
             }
-           
-        }
-        .post-comment-content-container{
-            margin-left: 10px;
-            margin-top: 10px;
-            h2{
-                @include tinyText(16px);
-                font-weight: 600;
-                color: #181717;
-            }
-            p{
-                @include tinyText(14px);
-                margin-bottom: 7px;
-                margin-top: 1px
-            }
-          
         }
     }
-}
-.comment-options-container{
-    background-color:white;
-    padding:10px;
-    text-align: center;
    
-    z-index: 40;
-    border: $border;
-   box-shadow: $shadowOne;
-   h2{
-    border-radius: 4px;
-    font-weight: bold;
-    margin-top: 7px;
-    padding: 5px 10px;
-   }
-   button{
-    padding:  5px 10px;
-    background-color: rgb(85, 3, 3);
-    @include tinyText(15px);
-    color: white;
-    border-radius: 4px;
-    margin-top: 7px;
-    width: 100%;
-   }
 }
 
-// @media (max-width:800px) {
-//     .child-2{
-//         @include display(space-between)
-//     }
-// }
+.main-post-header {
+    @include display(none);
+    margin-top: 29px;
+    img{
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-position: center;
+        object-fit: cover;
+    }
+   
+}

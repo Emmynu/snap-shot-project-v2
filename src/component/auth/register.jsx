@@ -5,121 +5,81 @@ import loadingImage from "../../images/loading.png";
 import { push,ref } from 'firebase/database';
 import { db } from '../../firebase/firebase-config';
 import "../../css/auth/auth.css"
-import { NavLink,useNavigate } from 'react-router-dom';
+import { Form, Link, redirect, useActionData, useNavigation } from 'react-router-dom';
 
 
 
-const active={
-  textDecoration:"underline"
+export async function registerAction({ request }){
+  const formData = await request.formData() // more like the FormData Api but using react-router-dom to handle
+  const data = Object.fromEntries(formData);
+  const formValue = Object.values(data)
+  if(formValue.includes("")){
+    return "Fill out all fields"
+  }
+  else{
+    try {
+      const newUser =  await createUserWithEmailAndPassword(auth,data.email,data.password)
+      const updateName = await updateProfile(auth.currentUser,{
+       displayName:data.name,
+       photoURL: "Coming soon...."
+      })
+     
+     await push(ref(db, `users/${newUser?.user?.uid}`), {
+       name:newUser?.user?.displayName,
+       email:newUser?.user?.email,
+       password:data.password,
+       url:newUser?.user?.photoURL
+     })
+     window.location = "/login"
+   
+     } catch (error) {
+       return error.message
+     }
+  }
+  
+  return null
 }
 
 function Register() {
-  const [handleInput, setHandleInput] = useState({
-    name:"",
-    email:"",
-    password:"",
-  })
-  const [authState, setAuthState] = useState({
-    isLoading: false,
-    errMessage:null
-  })
-  const navigate = useNavigate()
+  const [isText, setIsText] = useState(false)
+  const state = useActionData()
+  const navigation =  useNavigation()
 
-  function handleUserInput(e){
-    const {name,value} = e.target
-    setHandleInput(prev=>{
-      return {...prev, [name]:value}
-    })
-  }
-
-
-  function handleSubmitWihForm(e){
-    e.preventDefault()
-    const {name,email,password} = handleInput
-    setAuthState({isLoading:true,errMessage:null})
-
-    email.length > 0 && password.length > 0 && name.length > 0
-    ?
-    
-    createUserWithEmailAndPassword(auth, email, password).then(({user})=>{
-      // update name and photo  
-        updateProfile(auth.currentUser,{
-          displayName: name,
-          photoURL: "https://source.unsplash.com/random/200x200?sig=1"
-        }).then(res=>{
-          // save user to db
-          const userInfo={
-            id:user.uid,
-            name:user.displayName,
-            photoURL:user.photoURL,
-            email:user.email,
-            password,
-            followers:0,
-          }
-          push(ref(db,`users/${user?.uid}`),userInfo)
-        })
-        setAuthState({isLoading:false,errMessage:null}) 
-        navigate("/login")
-      }).catch(err=>{
-        setAuthState({isLoading:false,errMessage:err.message})
-      }) 
-    :
-    setAuthState({isLoading:false,errMessage:"Fill out all input field"})
-
-    // close label
-    setTimeout(() => {
-      setAuthState({})
-    }, 3000);
-  }
-
-
-
+  
   // jsx
   return (
-    <form className='form-container'>
+   <Form method='post' className='form-container' replace>
+    <header className='form-header'>
+      <h2>Create An Account</h2>
+    </header>
+
+
+    <main className='form-input-container'>
+      {state && <h2 className='state'>{state}</h2>}
       <section>
-          <img src="https://source.unsplash.com/random/200x200?sig=1" alt="" className='w-full object-cover rounded-mdx object-center' style={{height:"300px"}}/>
+        <label htmlFor="name">Username</label><br/>
+        <input type="text" name="name" className='input' />
       </section>
 
-      
-     <article>
-     <div className='text-center font-medium text-mdx'>
-            <span className="">
-                <NavLink style={({isActive})=>isActive?active:null} to="/register" >Register</NavLink>
-            </span>
-            <span className="ml-1">
-                <NavLink style={({isActive})=>isActive?active:null} to="/login">Login</NavLink>
-            </span>
-        </div>
-        <header>
-            <h2 className='form-header'>Create an account</h2>
-            <h4 className='error'>{authState.errMessage}</h4>
-        </header>
+      <section>
+        <label htmlFor="email">Email</label><br/>
+        <input type="email" name="email" className='input' />
+      </section>
 
-        <section className='input-container'>
-            <input type="text" name="name" value={handleInput.name} onChange={handleUserInput} placeholder='Username'/>
-        </section>
-
-        <section  className='input-container'>
-            <input type="email" name="email" value={handleInput.email} onChange={handleUserInput} placeholder='user@gmail.com'/>
-        </section>
-
-        <section  className='input-container'>
-            <input type="password" name="password" value={handleInput.password} onChange={handleUserInput} placeholder='user123'/>
-        </section>
-
-        <div className={!authState.isLoading? "not-loading" : "loading"}>
-        {
-        !authState.isLoading ? 
-          <button onClick={handleSubmitWihForm} className='register-btn'>Register</button>
-         :
-          <img src={loadingImage} alt='loading-image' className='animate-spin'/>
-       }
+      <div>
+        <label htmlFor="password">Password</label><br/>
+       <div className='flex bg-slate-100 border border-slate-600 items-center justify-between mb-3 p-1 rounded-mdx'>{isText ? <input type="text" name="password" className='w-full bg-transparent outline-none'/> : <input type="password" name="password" className='w-full bg-transparent outline-none'/>}
+        <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>view</span> </div>
       </div>
-      </article>
 
-    
-    </form>
+      {navigation.state !== "submitting" ? <button className='submit-btn'>Submit</button >: <button className='submit-btn'>Loading...</button>}
+
+      <footer className='form-footer'>
+        <h4>Already a member? <span className='text-green-600'><Link to="/login">Login</Link></span></h4>
+      </footer>
+    </main>
+
+   </Form>
   )
 }
 
