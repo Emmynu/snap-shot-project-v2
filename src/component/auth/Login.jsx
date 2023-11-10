@@ -18,6 +18,7 @@ export async function loginAction({ request }) {
     const user = await signInWithEmailAndPassword(auth,data.email,data.password)
     console.log(user);
     window.location = "/"
+    localStorage.setItem("access", user?.user?.uid)
   } catch (error) {
     return error.message
   }
