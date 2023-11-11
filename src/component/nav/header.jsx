@@ -154,7 +154,7 @@ const Header = () => {
       <Outlet/>
 
       {/* footer goes here */}
-      <footer className='footer mt-3 ' >
+      <footer className='footer mt-4 p-5' >
          <h2>{new Date().getFullYear()} &copy; All Rights Reserved</h2> 
       </footer>
     </section>
