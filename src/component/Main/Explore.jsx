@@ -4,14 +4,14 @@ import "../../css/main/explore.css"
 import AOS from "aos"
 import "aos/dist/aos.css"
 import { client } from '../../data/client'
+import searchIcon from "../../images/search-icon.png"
 
 
 export default function Explore() {
-  const [search,setSearch] = useState("")
+  const [search,setSearch] = useState({fileType: "Photos", word: ""})
   const [error,setError] = useState("")
   const [Loading,setLoading] = useState(true)
   const [Image,setImage] = useState("")
-  const searchType =localStorage.getItem("searchType")
 
  const activeLink={
     backgroundColor:"green",
@@ -39,52 +39,57 @@ useEffect(()=>{
     setImage(res?.src?.large2x)
     setLoading(false)
   }).catch(err=>{
-    setError(err.message)
-    setLoading(false)
+    // setError(err.message)
+    setLoading(true)
   })
 },[])
 
 // useEffect(()=>{},[searchType])
-if (Loading)return <h2 className='explore-state h-[73vh]  translate-y-[40%]'>Loading...</h2>
+if (Loading)return <div className='explore-state'>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
 if (error)return <h2 className='explore-state  h-[73vh]  translate-y-[40%]'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
 
-  function searchPictures(){
-    if(search.length > 0 && searchType !== null){
-      window.location = `/search/?text=${search}&type=${searchType}`
+
+function handleSearch(e){
+  const {value,name} = e.target
+  setSearch(prev=>{
+    return {...prev, [name]: value}
+  })
+}
+
+  function searchFunc(){
+    if(search.fileType.length >0 && search.word.length>0){
+      window.location = `/search/?text=${search.word}&type=${search.fileType}`
     }
   }
 
 
+
+  console.log(search)
   return (
     
     <>
     <main >
-      <header className='home-header relative'>
+  
 
-        <section className='home-label'>
-        <img src={Image} className='home-image'/>
-          <article className='home-search'>
-            <h1 className='home-text' data-aos={`fade-right`} data-aos-duration={"3000"}>The Best place to get curated pictures and videos</h1>
-
-            <div className='mt-5'>
-              <section>
-              <span className='label ml-0 text-mdx text-white cursor-pointer'  onClick={()=>localStorage.setItem("searchType","Photos")} style={searchType===`Photos`? Active:null}>
-                  Photos
-                </span>
-                <span className='label ml-1.5 text-mdx text-white cursor-pointer' onClick={()=>localStorage.setItem("searchType","Videos")} style={searchType===`Videos`? Active:null}>
-                  Videos
-                </span>
-              </section>
-
-              <input type="text" name=""  className="search-input"  value={search} onChange={(e)=>setSearch(e.target.value)} />
-
-              <span className='remove-all-btn cursor-pointer font-bold -ml-3 bg-slate-700 -mt-1 py-2.5 rounded-s-mdx' onClick={searchPictures} style={{backgroundColor:"#0c2f0c"}}>
-               Search
-              </span>
-            </div>
-          </article>
+      <header style={{background:`url(${Image})`}} className='w-full py-[150px] px-[20px] md:px-[100px] h-full object-cover flex justify-center'>
+        <section>
+        <h1 className='home-text' data-aos={`fade-right`} data-aos-duration={"3000"}>Free stock photo of 90s wallpaper, analog, beautiful flowers</h1>
+        <section className='flex justify-center items-center mt-5 '>
+          <select value={search.fileType} name="fileType" onChange={handleSearch} className='bg-green-600 text-white p-2 outline-none tracking-wider cursor-pointer '>
+            <option >Photos</option>
+            <option >Videos</option>
+          </select>
+          <input type="text" name="word" onChange={handleSearch} className="px-2 outline-none text-sm text-slate-600 tracking-wider border border-slate-700  w-1/2 h-[37px]" placeholder='search....'/>
+          
+          <img src={searchIcon} onClick={searchFunc} className='p-[3px] cursor-pointer bg-white border border-l-0 w-9 border-slate-700 '/>
         </section>
-      </header> 
+        </section>
+      </header>
 
 
       <article className='home-navlinks'>
@@ -106,3 +111,6 @@ if (error)return <h2 className='explore-state  h-[73vh]  translate-y-[40%]'>{err
     </>
   )
 }
+
+
+

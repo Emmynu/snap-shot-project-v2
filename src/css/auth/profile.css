@@ -2,37 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base{
     .profile-container{
-        @apply flex justify-center mt-7 md:mt-10 lg:mt-16 place-content-center
+        @apply flex justify-center
     }
-    .profile-name{
-        @apply  text-3xl md:text-4xl lg:text-4xl font-bold text-slate-700
+    .user-actions-container{
+        @apply flex justify-evenly items-center gap-6 mt-6
     }
-    .profile-email{
-        @apply  text-mdx md:text-base lg:text-mdx my-1 tracking-wider text-slate-600
+    .user-actions-container div{ 
+        @apply flex items-center
     }
-    .profile-photo{
-        /* @apply  rounded-2xl; */
-        width: 250px;
-        height: 250px;
-        aspect-ratio: 1;
-        border-radius: 50%;
-        /* aspect: ratio 1px; */
-    }
-    .update-btn{
-        @apply bg-emerald-600 text-white tracking-wider text-center px-5 py-1  rounded-mdx
-    }
-    .loading-profile{
-        @apply mt-8 ml-8 font-medium text-lg select-none cursor-pointer text-slate-600
-    }
-    .profile-gittles{
-        @apply text-slate-600 tracking-wider
-    }
-    .profile-gittles span{
-        @apply mx-1
-    }
-    .user-not-found-label{
-        @apply text-slate-600 tracking-wide text-base  md:text-lg
+    .user-actions-container div h2{
+        @apply text-[17px] tracking-wider font-medium ml-2 text-center text-slate-700;
+        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     }
 }
