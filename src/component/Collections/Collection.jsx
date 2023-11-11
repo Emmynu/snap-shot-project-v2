@@ -36,14 +36,14 @@ export default function Collection() {
               <button className='remove-all-btn' onClick={()=>removeAll(setisError)}>Delete All</button>
                 {/* keys */}
                   <section >
-                 <div className='collection-keys-container keys-container'>
+                 <div className='collection-keys-container select-none overflow-x-scroll scrollbar-none '>
                   <span className=' collection-keys text-slate-100'><Link to="">All</Link></span>
                     <div className='collection-keys-container'>
                       {collections.map((col)=>{
                     const colKeys = (col[0])
                     return(
                       <h2 className='collection-keys text-slate-100'>
-                        <span onClick={()=>deleteCollectionGroup(colKeys)} className='remove-key'>X</span>
+                        {/* <span onClick={()=>deleteCollectionGroup(colKeys)} className='remove-key'>X</span> */}
                         <Link className="" to={`/collections/?label=${colKeys}`} >{colKeys}</Link>
                         </h2>
                     )
