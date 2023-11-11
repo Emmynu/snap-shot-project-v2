@@ -13,8 +13,7 @@
   .post-container .post-main .post-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin: 6px; }
+    align-items: center; }
     .post-container .post-main .post-header-2 {
       display: flex;
       justify-content: none;

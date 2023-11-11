@@ -10,11 +10,12 @@ import { currentUser, currentUserID } from "../../data/users";
 import Moment from "react-moment";
 import { serverTimestamp } from "firebase/database";
 import likeIcon from "../../images/unlike.png"
-import commentIcon from "../../images/comment.png"
+import commentIcon from "../../images/message.png"
 import bookmarkIcon from "../../images/bookmark.png"
 import deleteIcon from "../../images/del.png"
-import like2Icon from "../../images/like.png"
-
+import addIcon from "../../images/add.png"
+import messageIcon from "../../images/comment.png"
+import InputEmoji from "react-input-emoji";
 
 
 
@@ -93,8 +94,9 @@ export default function Posts() {
           url:user?.photoURL
         }
       }
-      // console.log(postData);
-      savePost(postData)
+      savePost(postData).then
+      (window.location = "/posts")
+
     } catch (error) {
      setError(error.message);
     }
@@ -150,22 +152,25 @@ async function likePost(id) {
 
   return (
     <>
-      <main   className="grid grid-cols-1 md:grid-cols-3 mx-1 md:mx-12 lg:grid-cols-3  mt-8 gap-7  post-container">
-        {/* side bar  */}
-      {/* <section className="bg-green-600 post-sections hidden md:block"></section> */}
+      <main   className="grid grid-cols-1 md:grid-cols-3 md:max-w-6xl gap-5 mx-auto mt-3 md:mt-8  post-container">
        
-
       {/* main */}
-      <section className="post-main col-span-2 post-sections overflow-scroll">
+      <section className="post-main md:col-span-2 ">
         <main>
-          <header className="post-header">
+          <header className="post-header m-7">
               <section>
-                  <h2>Socials</h2>
+                  <h2 className=" text-[21px] md:text-[23px] text-slate-800 -tracking-wider font-medium">Trending Feeds</h2>
               </section>
               <section className="post-header-2">
-                  <h2 onClick={openModal}>Add</h2>
-                  <h2>Message</h2>
-                  <h2>Profile</h2>
+                  <h2 onClick={openModal} className="mr-1 cursor-pointer">
+                    <img src={addIcon} className="w-6 transition-transform hover:scale-105"  />
+                  </h2>
+                  <h2>
+                    <img src={messageIcon} className="w-6 mx-1 transition-transform hover:scale-105 cursor-pointer"/>
+                  </h2>
+                  <h2>
+                    <img src={user?.photoURL} className="w-[30px] h-[30px] border border-slate-700 object-cover rounded-[50%] ml-1" />
+                  </h2>
               </section>
           </header>
 
@@ -175,13 +180,17 @@ async function likePost(id) {
               return(
                 <main className="mt-1.5">
                   <header className="main-post-header mx-1.5 ">
-                    <img src={testImg}/>
-                    <h2 className="font-bold text-slate-800 text-base -tracking-wide ml-1.5">{post[1]?.user?.name}</h2>
+                   <article>
+                     <img src={post[1]?.user?.url}/>
+                   </article>
+                   <article className="ml-1.5">
+                   <h2 className="font-bold text-slate-800 text-base -tracking-wide mt-2">{post[1]?.user?.name}</h2>
+                   <span className="-mt-12">
+                   <Moment fromNow className="text-sm text-slate-600">{post[1]?.time}</Moment>
+                   </span>
+                   </article>
                   </header>
-                  <section className="text-sm ml-12 -mt-1.5 text-slate-600">
-                    <Moment fromNow>{post[1]?.time % (1000 * 60)}</Moment>
-                    </section>
-
+              
                     <h2 className="m-1.5 text-slate-700 tracking-wide font-medium text-sm md:text-mdx">{seeMore ?`${ post[1]?.caption?.label.slice(0,50)}`: post[1]?.caption?.label} { post[1]?.caption?.label.length > 50 && <span onClick={()=>setSeeMore(!seeMore)} className="text-green-600 italic text-sm cursor-pointer">{seeMore ? "more": "less"}</span>}</h2>
                   
                   <section className="main-post w-[100%] h-[300px] md:h-[400px] object-cover">
@@ -191,19 +200,20 @@ async function likePost(id) {
                   <footer className="mt-3 mx-3">
                    <main className="flex items-center justify-between">
                     <section className="flex items-center">
-                         <img className="w-[24px] ml-0 cursor-pointer" src={likeIcon} alt="like-icon" onClick={()=>likePost(post[0])}/>
-                        <img className="w-[23px] ml-1" src={commentIcon} alt="comment-icon" />
+                         <img className="w-[24px] ml-0 cursor-pointer transition-transform hover:scale-105" src={likeIcon} alt="like-icon" onClick={()=>likePost(post[0])}/>
+
+                        <img className="w-[22px] ml-1.5 cursor-pointer transition-transform hover:scale-105" src={commentIcon} alt="comment-icon" />
                         
                       </section>
                       <section>
-                        <img src={bookmarkIcon} alt="bookmark-icon" />
+                        <img src={bookmarkIcon} alt="bookmark-icon"  className="transition-transform cursor-pointer hover:scale-105"/>
                       </section>
                    </main>
                    <Likes postId={post[0]}/>
                   <CommentList postId={post[0]}/>
 
                    <section className="flex mt-3 items-center">
-                    <img src={testImg} className="w-[25px] h-[25px] object-cover rounded-[50%]"/>
+                    <img src={user?.photoURL} className="w-[25px] h-[25px] object-cover rounded-[50%]"/>
                     <input type="text" name="comment" onChange={(e)=>setComment(e.target.value)} placeholder="Write a comment..." className=" w-[90%] text-sm text-slate-700 ml-2 outline-none p-2" maxLength={100}/>
                     <button onClick={()=>createComment(post[0])} className="text-green-600 font-medium text-base">Post</button>
                     
@@ -218,7 +228,7 @@ async function likePost(id) {
       </section>
 
       {/* side bar */}
-      <section className="bg-purple-600 post-sections">
+      <section className="bg-purple-600 post-sections hidden md:inline-grid md:col-span-1">
         <div></div>
         <div></div>
       </section>

@@ -23,7 +23,7 @@
         box-shadow: 3px 8px 18px rgba(222, 221, 221, 0.6);
         .post-header{
             @include display(space-between);
-            margin: 6px;
+            // margin: 6px;
             &-2{
                 @include display(none)
             }

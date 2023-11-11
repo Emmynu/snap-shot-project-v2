@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from "../../firebase/firebase-config";
-import loadingImage from "../../images/loading.png";
+import eyeImage from "../../images/eye.png";
 import { push,ref } from 'firebase/database';
 import { db } from '../../firebase/firebase-config';
 import "../../css/auth/auth.css"
@@ -21,7 +21,7 @@ export async function registerAction({ request }){
       const newUser =  await createUserWithEmailAndPassword(auth,data.email,data.password)
       const updateName = await updateProfile(auth.currentUser,{
        displayName:data.name,
-       photoURL: "Coming soon...."
+       photoURL: "https://images.pexels.com/photos/19043170/pexels-photo-19043170.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
       })
      
      await push(ref(db, `users/${newUser?.user?.uid}`), {
@@ -69,7 +69,8 @@ function Register() {
       <div>
         <label htmlFor="password">Password</label><br/>
        <div className='flex bg-slate-100 border border-slate-600 items-center justify-between mb-3 p-1 rounded-mdx'>{isText ? <input type="text" name="password" className='w-full bg-transparent outline-none'/> : <input type="password" name="password" className='w-full bg-transparent outline-none'/>}
-        <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>view</span> </div>
+        <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>
+        <img src={eyeImage} alt="eye" className='w-5' /></span> </div>
       </div>
 
       {navigation.state !== "submitting" ? <button className='submit-btn'>Submit</button >: <button className='submit-btn'>Loading...</button>}

@@ -4,8 +4,13 @@
 
 @layer base{
    .form-container{
-    @apply bg-white border-t-4 rounded-mdx border-green-600  w-11/12 lg:w-1/3 md:w-6/12 shadow-lg p-6;
+    @apply bg-white border-t-4 rounded-mdx border-green-600  w-[100%] m-0 h-[100vh] md:h-full  lg:w-1/3 md:w-6/12 shadow-lg p-6;
     margin: 10% auto 0;
+   }
+   @media(max-width:800px){
+      .form-container{
+         margin:  0px;
+      }   
    }
    .form-header h2{
         @apply text-2xl text-center mb-3 font-medium;

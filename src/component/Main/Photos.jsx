@@ -13,6 +13,7 @@ export default function Photos() {
       isError:false,
       errorMessage:"",
     })
+    
   useEffect(()=>{
     client.photos.curated({per_page:56}).then(({photos})=>{
       setPhotos(photos)

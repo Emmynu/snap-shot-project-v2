@@ -1,12 +1,13 @@
 import { useState,useEffect } from 'react'
 import { upload } from '../../data/upload';
-import { push,ref } from 'firebase/database';
-import { db } from '../../firebase/firebase-config';
+import { storage } from '../../firebase/firebase-config';
 import { Link, useNavigate } from 'react-router-dom';
-import { currentUser,currentUserID } from '../../data/users';
+import {currentUserID } from '../../data/users';
 import loadingIcon from "../../images/loading.png"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import "../../css/network/upload.css"
-import { time,day,month} from "../../data/client"
+import { serverTimestamp } from 'firebase/database';
+
 
 
 export default function Upload() {
@@ -17,45 +18,32 @@ export default function Upload() {
   const navigate = useNavigate()
 
 
-  function uploadFile(e){
+async  function uploadFile(e){
     e.preventDefault()
-   
-    if (files !== null) {
-      if (files.type.startsWith("image/")||files.type.startsWith("video/")) {
-        upload(files,setAppState).then(res=>{
-          setLoading(true) 
-          setTimeout(() => {
-           
-            const uploadData = {
-              url:localStorage.getItem("url"),
-              description,
-              type:files.type.startsWith("image/")?"images":"video",
-              dateAdded: `${month} ${day} ${time}`
-            }
-            push(ref(db,`uploads/`+ currentUserID),uploadData).then(res=>{
-              setLoading(false)
-              setFiles(null)
-              setDescription("")
-              navigate("/uploads")
-            }).catch(err=>{
-              setAppState(err.message)
-            })
-          }, 9100);
-        })
-      }
-      else if(!files.type.startsWith("image/")||files.type.startsWith("video/")){
-        setAppState("Invalid File Format!")
-      }
+    if(files!==null){
+      setLoading(true)
+    if(files.type.startsWith("image/") ||  files.type.startsWith("video/")){
+      const storageRef = ref(storage, `uploadBucket/${currentUserID}/${files.name}`)
+      await uploadBytes(storageRef, files)
+      const url  = await getDownloadURL(storageRef)
+      upload({
+        url,
+        type: files.type.startsWith("image/") ? "images" : "video",
+        time: serverTimestamp(),
+        description
+    })
+     setLoading(false)
+     navigate("/uploads")
 
-     
     }
-    else if(files === null || files === "" ){
-      setAppState("Invalid input!")
+    else{
+      setAppState("Invalid File Format. Please ensure selected file is an image or video")
       setLoading(false)
     }
-    setTimeout(() => {
-      setAppState("")
-    }, 3000);
+    }
+    else{
+      setAppState("Please select a file")
+    }
   }
 
   return (
@@ -68,13 +56,13 @@ export default function Upload() {
         </span>
       </section>
 
-        <article className='error-container'>
+        <article className='error-container mt-2'>
           <h2>{appState}</h2>
         </article>
 
       <form className='mt-5'>
         <article  className='upload-form-container'>
-          <textarea rows="4" cols="40"  value={description} onChange={(e)=>setDescription(e.target.value)} placeholder='Description'> </textarea>
+          <textarea rows="5" cols="40"  value={description} onChange={(e)=>setDescription(e.target.value)} placeholder='Please enter a caption...'> </textarea>
         </article>
         <article  className='upload-form-container'>
           <input type="file" name="file" onChange={(e)=>setFiles(e.target.files[0])}/>
@@ -87,7 +75,7 @@ export default function Upload() {
           <img src={loadingIcon} className=' animate-spin'/>
       </div>
         :
-        <button onClick={uploadFile}  className='upload-butn'>Upload</button>}
+        <button  className='upload-butn' onClick={uploadFile}>Upload</button>}
         </article>
       </form>
     </main>

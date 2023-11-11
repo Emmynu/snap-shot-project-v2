@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import { useState } from 'react'
 import { Link, Form, useActionData, useNavigation, redirect } from 'react-router-dom';
 import { auth } from '../../firebase/firebase-config'
-import loadingImage from "../../images/loading.png";
+import eyeImage from "../../images/eye.png";
 import "../../css/auth/auth.css"
 
 
@@ -50,7 +50,8 @@ export default function Login() {
          <div>
            <label htmlFor="password">Password</label><br/>
           <div className='flex bg-slate-100 border border-slate-600 items-center justify-between mb-3 p-1 rounded-mdx'>{isText ? <input type="text" name="password" className='w-full bg-transparent outline-none'/> : <input type="password" name="password" className='w-full bg-transparent outline-none'/>}
-           <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>view</span> </div>
+           <span onClick={()=>setIsText(!isText)} className='cursor-pointer'>
+            <img src={eyeImage} alt="eye" className='w-5' /></span> </div>
          </div>
    
          {navigation.state !== "submitting" ? <button className='submit-btn'>Submit</button >: <button className='submit-btn'>Loading...</button>}

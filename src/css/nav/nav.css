@@ -48,9 +48,7 @@
     .footer{
         @apply bg-gray-800 text-slate-50 font-medium text-center 
     }
-    .footer h2{
-        @apply pt-5
-    }
+
 
     .small-screen-nav{
         @apply fixed block md:hidden shadow-lg z-50 shadow-slate-100 bg-white cursor-pointer p-4;

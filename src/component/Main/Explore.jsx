@@ -45,8 +45,8 @@ useEffect(()=>{
 },[])
 
 // useEffect(()=>{},[searchType])
-if (Loading)return <h2 className='explore-state'>Loading...</h2>
-if (error)return <h2 className='explore-state'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
+if (Loading)return <h2 className='explore-state h-[73vh]  translate-y-[40%]'>Loading...</h2>
+if (error)return <h2 className='explore-state  h-[73vh]  translate-y-[40%]'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
 
   function searchPictures(){
     if(search.length > 0 && searchType !== null){
@@ -85,6 +85,8 @@ if (error)return <h2 className='explore-state'>{error} <span className='text-bas
           </article>
         </section>
       </header> 
+
+
       <article className='home-navlinks'>
         <span>
           <NavLink style={({isActive})=>isActive?activeLink:null} to="/">Photos</NavLink>
