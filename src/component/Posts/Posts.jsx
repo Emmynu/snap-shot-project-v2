@@ -10,12 +10,15 @@ import { currentUser, currentUserID } from "../../data/users";
 import Moment from "react-moment";
 import { serverTimestamp } from "firebase/database";
 import likeIcon from "../../images/unlike.png"
+import like2Icon from "../../images/like.png"
 import commentIcon from "../../images/message.png"
 import bookmarkIcon from "../../images/bookmark.png"
 import deleteIcon from "../../images/del.png"
 import addIcon from "../../images/add.png"
 import messageIcon from "../../images/comment.png"
-import InputEmoji from "react-input-emoji";
+import { Link } from "react-router-dom";
+import { signOutUser } from "../nav/header";
+
 
 
 
@@ -30,8 +33,6 @@ export default function Posts() {
   const [comment, setComment] = useState("")
   const [posts,setPosts] = useState([].reverse())
   const [seeMore, setSeeMore] = useState(true)
-  const [likes,setLikes] = useState([])
-  const [hasLiked,setHasLiked] = useState(false)
 
   useEffect(()=>{
     currentUser(setUser)
@@ -120,36 +121,6 @@ async function createComment(id) {
 }
 
 
-// likes 
-async function likePost(id) {
- await getLikes(id,setLikes)
-//  console.log("liked");
-//  console.log(likes);
-
-  if(likes.length <= 0){
-    likePostFunc(id,{
-      id:user?.uid,
-      name:user?.displayName
-    })
-    setHasLiked(false)
-  }
-  else{
-    likes.map(like=>{
-      if(like[1].id === user?.uid){
-        removeLike(id,like[0])
-        setHasLiked(true)
-       }
-       else if(like[1].id !== user?.uid){
-        likePostFunc(id,{
-          id:user?.uid,
-          name:user?.displayName
-        })
-        setHasLiked(false)
-       }
-    })
-  }
-}
-
   return (
     <>
       <main   className="grid grid-cols-1 md:grid-cols-3 md:max-w-6xl gap-5 mx-auto mt-3 md:mt-8  post-container">
@@ -169,7 +140,7 @@ async function likePost(id) {
                     <img src={messageIcon} className="w-6 mx-1 transition-transform hover:scale-105 cursor-pointer"/>
                   </h2>
                   <h2>
-                    <img src={user?.photoURL} className="w-[30px] h-[30px] border border-slate-700 object-cover rounded-[50%] ml-1" />
+                    <img src={user?.photoURL} className="w-[30px] h-[30px] border border-slate-700 object-cover rounded-[50%] ml-1" onClick={signOutUser}/>
                   </h2>
               </section>
           </header>
@@ -179,6 +150,7 @@ async function likePost(id) {
             {posts.map(post=>{
               return(
                 <main className="mt-1.5">
+                  <Link to={`/profile/${post[1].user?.id}`}>
                   <header className="main-post-header mx-1.5 ">
                    <article>
                      <img src={post[1]?.user?.url}/>
@@ -190,7 +162,7 @@ async function likePost(id) {
                    </span>
                    </article>
                   </header>
-              
+                  </Link>
                     <h2 className="m-1.5 text-slate-700 tracking-wide font-medium text-sm md:text-mdx">{seeMore ?`${ post[1]?.caption?.label.slice(0,50)}`: post[1]?.caption?.label} { post[1]?.caption?.label.length > 50 && <span onClick={()=>setSeeMore(!seeMore)} className="text-green-600 italic text-sm cursor-pointer">{seeMore ? "more": "less"}</span>}</h2>
                   
                   <section className="main-post w-[100%] h-[300px] md:h-[400px] object-cover">
@@ -198,19 +170,16 @@ async function likePost(id) {
                   </section>
 
                   <footer className="mt-3 mx-3">
-                   <main className="flex items-center justify-between">
-                    <section className="flex items-center">
-                         <img className="w-[24px] ml-0 cursor-pointer transition-transform hover:scale-105" src={likeIcon} alt="like-icon" onClick={()=>likePost(post[0])}/>
-
-                        <img className="w-[22px] ml-1.5 cursor-pointer transition-transform hover:scale-105" src={commentIcon} alt="comment-icon" />
-                        
+                   <main>
+                    <section className="flex items-center justify-between">
+                      <div><Likes postId={post[0]} userId={user?.uid} name={user?.displayName}/></div>
+                      <img src={bookmarkIcon} alt="bookmark-icon"  className="transition-transform cursor-pointer hover:scale-105"/>
                       </section>
                       <section>
-                        <img src={bookmarkIcon} alt="bookmark-icon"  className="transition-transform cursor-pointer hover:scale-105"/>
+                       <div><CommentList postId={post[0]}/></div>
                       </section>
                    </main>
-                   <Likes postId={post[0]}/>
-                  <CommentList postId={post[0]}/>
+               
 
                    <section className="flex mt-3 items-center">
                     <img src={user?.photoURL} className="w-[25px] h-[25px] object-cover rounded-[50%]"/>
@@ -281,12 +250,17 @@ function CommentList({postId}) {
 
   return <main className="mt-3">
     {comments.map(comment=>{
-      return <section className="flex justify-between items-center ">
+      return <section className="flex justify-between items-center">
+        <Link>
+          <>
           <article className="flex items-center mt-2">
-            <img src={testImg} className="rounded-[50%] w-[30px] h-[30px]"/>
-          <h2 className="ml-1 font-medium text-mdx ">{comment[1]?.name}</h2>
-          <span className="ml-1.5 text-sm tracking-wide text-slate-700">{comment[1]?.comment}</span>
-        </article>
+              <img src={testImg} className="rounded-[50%] w-[30px] h-[30px]"/>
+            <h2 className="ml-1 font-medium text-mdx ">{comment[1]?.name}</h2>
+            <span className="ml-1.5 text-sm tracking-wide text-slate-700">{comment[1]?.comment}</span>
+          </article>
+          </>
+        </Link>
+          
         <section>
         {comment[1].id === currentUserID && <img src={deleteIcon} className="w-4 cursor-pointer" onClick={()=>removeComment(postId,comment[0])}/>}
         </section>
@@ -295,14 +269,36 @@ function CommentList({postId}) {
   </main>
 }
 
-function Likes({postId}){
+function Likes({postId,userId,name}){
   const [likes, setLikes] = useState([])
+  const [hasLiked,setHasLiked] = useState(false)
 
   useEffect(()=>{
     getLikes(postId, setLikes)
   },[])
 
+  function likePost() {
+  if(likes.find(like => like[1].id === userId)){
+    setHasLiked(false)
+    likes.map(like=>{
+     like[1].id === userId && removeLike(postId,like[0])
+    })
+   
+  }
+  else{
+    setHasLiked(true)
+    likePostFunc(postId,{
+      id:userId,
+      name
+    })
+  }
+  }
+
   return <main>
+     <section className="flex items-center mt-1">
+       <img className="w-[24px] ml-0 cursor-pointer transition-transform hover:scale-105" src={!hasLiked ? likeIcon : like2Icon} alt="like-icon" onClick={()=>likePost(postId)}/>
+      <img className="w-[22px] ml-1.5 cursor-pointer transition-transform hover:scale-105" src={commentIcon} alt="comment-icon" />
+     </section>
     <h2 className="text-xs text-slate-600 mt-1 ml-1">{likes.length} {likes.length > 1 ? "Likes" : "Like"}</h2>
   </main>
 

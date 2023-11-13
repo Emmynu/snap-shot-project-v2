@@ -5,6 +5,14 @@ import { auth } from '../../firebase/firebase-config'
 import "../../css/nav/nav.css"
 import logo from "../../images/logo.png"
 
+export function signOutUser(){
+    signOut(auth).then(res=>{
+        localStorage.removeItem("access")
+        window.location = "/login"
+    }).catch(err=>{
+        alert("An error occured")
+    })
+}
 
 const Header = () => {
     const [navState, setNavState] = useState({
@@ -46,14 +54,7 @@ const Header = () => {
         })
     }
 
-    function signOutUser(){
-        signOut(auth).then(res=>{
-            localStorage.removeItem("access")
-            window.location = "/login"
-        }).catch(err=>{
-            alert("An error occured")
-        })
-    }
+    
 
   return (
     <section >
@@ -70,7 +71,7 @@ const Header = () => {
 
        <section className='page-container'>
         <span><NavLink to="/">Explore</NavLink></span>
-        <span ><NavLink to="/collections">Collecions</NavLink></span>
+        <span ><NavLink to="/collections">Collections</NavLink></span>
         <span className='cursor-pointer' onClick={toggleAdditionalNav}>...</span>
         <span className='upload-btn'><NavLink className="text-white" to="upload">Upload</NavLink></span>
        </section>

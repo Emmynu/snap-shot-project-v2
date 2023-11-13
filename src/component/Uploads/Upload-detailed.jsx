@@ -72,8 +72,7 @@ export default function UploadDetailed() {
         <Modal isOpen={isOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} className="w-11/12 md:w-6/12 lg:w-1/3 p-4 absolute top-56 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-green-600 outline-none rounded-mdx shadow-md">
 
         <p ref={(_subtitle)=>(subtitle = _subtitle)}></p>
-        {upload.type==="images"?<img src={upload.url} alt={uid} className="w-full h-[250px] object-cover rounded-mdx"/>:
-            <video controlsclassName="w-full h-[250px] object-cover rounded-mdx"><source src={upload.url}></source></video>}
+        {upload.type==="images" && <img src={upload.url} alt={uid} className="w-full h-[250px] object-cover rounded-mdx"/>}
         </Modal>
       </main>
       :

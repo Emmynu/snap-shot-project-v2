@@ -13,7 +13,7 @@ export async function savePost(data){
 }
 
 export async function likePostFunc(id,data){
-  push(ref(db, `likes/${id}`),data)
+  push(ref(db, `likes/` + id ),data)
 }
 
 export async function getLikes(id,likeContainer) {

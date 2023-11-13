@@ -27,6 +27,7 @@ export async function registerAction({ request }){
      await push(ref(db, `users/${newUser?.user?.uid}`), {
        name:newUser?.user?.displayName,
        email:newUser?.user?.email,
+       id:newUser?.user?.uid,
        password:data.password,
        url:newUser?.user?.photoURL
      })

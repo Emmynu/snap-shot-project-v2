@@ -5,16 +5,33 @@
 
 @layer base{
     .profile-container{
-        @apply flex justify-center
+        @apply flex justify-center mt-5 
     }
-    .user-actions-container{
-        @apply flex justify-evenly items-center gap-6 mt-6
+    .profile-img{
+        @apply w-[250px] h-[250px] object-cover rounded-[50%]
     }
-    .user-actions-container div{ 
-        @apply flex items-center
+    .profile-name{
+        @apply text-center my-1 text-2xl md:text-4xl font-medium md:overflow-hidden  overflow-x-scroll sm:scrollbar-thin scrollbar-track-slate-100
     }
-    .user-actions-container div h2{
-        @apply text-[17px] tracking-wider font-medium ml-2 text-center text-slate-700;
-        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    .profile-id{
+        @apply text-center text-sm text-slate-600 my-1
     }
+    .profile-footer{
+        @apply flex justify-center items-center mt-2
+    }
+    .profile-footer button{
+        @apply p-2  rounded-mdx cursor-pointer
+    }
+    .profile-footer div img{
+        @apply w-9
+    }
+    .profile-footer :nth-child(2){
+        @apply bg-slate-300
+    }
+    .profile-actions section  {
+        @apply text-base text-slate-600 tracking-wide
+    }
+   .profile-snap-btn{
+    @apply bottom-0 absolute right-1/3
+   }
 }
