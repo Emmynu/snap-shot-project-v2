@@ -1,87 +1,97 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { currentUser, currentUserID, getUsers } from "../../data/users"
 import { LoadProfile } from "../Others/Loading"
 import"../../css/auth/profile.css"
 import notFoundImg from "../../images/error.gif"
-import { getDatabase, increment, update,ref,push, remove } from "firebase/database"
+import { useParams } from "react-router-dom"
+import { useEffect, useState } from "react"
+import { currentUser, getFollowers, getUsers } from "../../data/users"
+import { push, ref, remove } from "firebase/database"
 import { db } from "../../firebase/firebase-config"
+import followImage from "../../images/add-user.png"
+import emailImage from "../../images/email.png"
+
 
 
 
 export default function Profiles() {
-    const { userId } = useParams()
-    const [user,setUsers] = useState(null)
-    const [currentuser,setCurrentUser] = useState(null)
-    const [isLoading,setIsLoading] = useState(true)
+ const { userId }  = useParams()
+ const [isLoading, setIsLoading] = useState(false)
+ const [isFollowing, setIsFollowing] = useState(false)
+ const [user, setUser] = useState([])
+ const [loggedUser, setLoggedUser] = useState([])
+ const [followers, setFollowers] = useState([])
 
-    useEffect(()=>{
-        getUsers(setUsers,userId,setIsLoading)
-        currentUser(setCurrentUser)
-    },[])
+  useEffect(()=>{
+    getUsers(setUser,userId,setIsLoading)
+    currentUser(setLoggedUser)
+  },[])
 
-    // console.log(user);
 
-    function followUser(id) {
-      user.map((person)=>{
-        console.log(person);
-      
-          if (person[1].followedBy) {
-           const followers= Object.entries(person[1]?.followedBy)
-          followers.map((follower)=>{
-            if (follower[1]?.id===currentuser?.uid) {
-              remove(ref(db,`users/${userId}/${id}/followedBy/${follower[0]}`)).then(res=>{
-                const updates={}
-                updates[`users/${userId}/${id}/followers`] = increment(-1)
-                update(ref(getDatabase()),updates)
-              })
-              console.log(`wvtf`);
-            }
-         })
-         } else {
-          const followerDetails={
-            name:currentuser?.displayName,
-            email:currentuser?.email,
-            url:currentuser?.photoURL,
-            id:currentuser?.uid
-          }
-          push(ref(db,`users/${userId}/${id}/followedBy`),followerDetails).then(res=>{
-            const updates={}
-            updates[`users/${userId}/${id}/followers`] = increment(1)
-            update(ref(getDatabase()),updates)
-           
-          })
-         }
+  useEffect(()=>{
+    getFollowers(userId,setFollowers)
+  },[])
 
-      })
-       
-        
-    }
-
+  
     if (isLoading) return <LoadProfile/>
+    
+   async function followUser() {
+      if (followers.find(user=>user[1]?.id === loggedUser?.uid)) {
+        console.log("unfollowed");
+        setIsFollowing(false)
+       try {
+        followers.map(user=>{
+        user[1].id === loggedUser?.uid &&  remove(ref(db, `followers/${userId}/${user[0]}`))
+        })
+       } catch (error) {
+        console.log(error.message);
+       }
+      }
+      else{
+        setIsFollowing(true)
+        console.log("following");
+        push(ref(db, `followers/${userId}`),{
+          id:loggedUser?.uid,
+          name:loggedUser?.displayName
+        }).catch(err=>console.log(err.message))
+      }
+    } 
 
     return  <>
-    {user.length !== null ? 
+    {user !== null ? 
     <main className="profile-container">
       {user.map(person=>{
-        // console.log(person[1].photoURL);
-        return <section>
-           { <img src={person[1].photoURL} className='profile-photo'/> }
-            <article className='text-center mt-6'>
-              <h2 className='profile-name'>{person[1].name}</h2>
-              <p className='profile-email'>{person[1].id}</p>
-              <article  className='text-center my-2'>
-                  <h2 className="profile-gittles"><span>Followers</span><span>{person[1].followers}</span></h2>
-              </article>
+        return (
+          <section>
+              <div className="flex justify-center items-center"><img src={person[1]?.url} alt={person[1]?.id} className="profile-img"/></div>
+              <h2 className="profile-name">{person[1]?.name}</h2>
+              <h5 className="profile-id">{person[1]?.id || userId}</h5>
+              <footer className="profile-footer">   
+                <button className={ !isFollowing ? "bg-green-600" : "bg-slate-400"} onClick={followUser} ><img src={followImage} alt="" /></button>
+                <button className="ml-1.5"><img src={emailImage}  /></button>
+              </footer>
 
-              <button className="update-btn" onClick={()=>followUser(person[0])}>Follow</button>   
-              <button className="update-btn ml-2 mt-1 bg-white border-2 border-green-600 text-green-600">Message</button>   
-            </article>                
-       </section>
+              <footer className="flex items-center text-center my-4 justify-evenly profile-actions">
+                <section>
+                  <h2>Followers</h2>
+                  <p>{followers.length}</p>
+                </section>
+
+                <section>
+                  <h2>Following</h2>
+                  <p>{followers.length}</p>
+                </section>
+
+                <section>
+                  <h2>Likes</h2>
+                  <p>{followers.length}</p>
+                </section>
+
+              </footer>
+            </section>
+        )
       })}
     </main>
     :
-    <section className="profile-container text-center">
+    <section className=" text-center">
       <article>
         <img src={notFoundImg} />
         <h2 className="user-not-found-label">User Not Found</h2>
