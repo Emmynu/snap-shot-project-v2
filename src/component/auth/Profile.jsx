@@ -34,6 +34,7 @@ export default function Profile() {
   
   function openModal(){
     setEdit(true)
+    setSelected(null)
   }
 
   function closeModal(){
@@ -80,7 +81,7 @@ export default function Profile() {
       }
       await update(dbRef(getDatabase()), updates)
       setEdit(false)
-      
+      setSelected(null)
     } catch (error) {
       
     }
@@ -104,11 +105,11 @@ export default function Profile() {
           <h3 className="profile-name">{`${user[1]?.name.charAt(0).toUpperCase()}${user[1].name.slice(1)}` }</h3>
         </section>
         <div onClick={openModal} className="flex bg-green-600 cursor-pointer rounded-mdx justify-center text-white px-3 py-1">
-          <img src={profile} className="w-6" />
+          <img src={profile} className="w-5 " />
           <p className="ml-1 tracking-wide">Edit Profile</p>
           </div>
 
-        <section className="profile-actions flex items-center text-center my-4 justify-evenly">
+        <section className="profile-actions flex items-center text-center my-4 justify-between md:justify-evenly">
           <section>
             <h2>Followers</h2>
             <p>20</p>
@@ -131,12 +132,12 @@ export default function Profile() {
       <Modal isOpen={edit} onAfterOpen={afterModalOpen} onRequestClose={closeModal} className="w-11/12 md:w-6/12 lg:w-1/3 p-4 absolute top-40 left-[50%] translate-x-[-50%] bg-white shadow-slate-100 border border-green-600 outline-none rounded-mdx shadow-md">
       <p ref={(_subtitle)=>(subtitle = _subtitle)}></p>
       <section className="flex flex-col justify-center">
-       {selected  ? <img src={selected} alt="selected-file" className="w-full h-[250px] object-cover"/> : <img src={camera} onClick={()=>profileRef.current.click()}/>}
+       <div className="flex justify-center">{selected  ? <img src={selected} alt="selected-file" className="w-full h-[250px] object-cover"/> : <img src={camera} onClick={()=>profileRef.current.click()} className="w-[30px] "/>}</div>
         <input type="file" hidden multiple={false} ref={profileRef} onChange={handleUpload}/>
         <input type="text" onChange={(e)=>setName(e.target.value)} className="outline-none border-none text-center my-2 text-mdx text-slate-700 tracking-wider w-full focus:ring-0" placeholder="Please enter a name..."/>
   
         <button className="w-full px-3 py-2 font-medium text-white bg-green-600 " 
-        onClick={()=>updateUserProfile(user[0],user[1])}>{updating ? "loading..." : "Update"}</button>
+        onClick={()=>updateUserProfile(user[0],user[1])}>{!updating ? "loading..." : "Update"}</button>
       </section>
       </Modal>
       </>

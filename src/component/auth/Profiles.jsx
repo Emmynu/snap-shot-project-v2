@@ -50,7 +50,8 @@ export default function Profiles() {
         console.log("following");
         push(ref(db, `followers/${userId}`),{
           id:loggedUser?.uid,
-          name:loggedUser?.displayName
+          name:loggedUser?.displayName,
+          url:loggedUser?.photoURL
         }).catch(err=>console.log(err.message))
       }
     } 

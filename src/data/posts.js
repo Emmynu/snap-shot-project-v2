@@ -1,8 +1,5 @@
-import { onAuthStateChanged } from "firebase/auth";
-import { auth, db } from "../firebase/firebase-config";
-import {onValue, orderByChild, push, query, ref, remove} from "firebase/database";
-// import { serverTimestamp } from "firebase/firestore";
-import { currentUserID } from "./users";
+import {  db } from "../firebase/firebase-config";
+import {onValue, push, ref, remove} from "firebase/database";
 
 export async function savePost(data){
   try {
@@ -50,3 +47,10 @@ export async function removeComment(postId,commentId){
   remove(ref(db,`comments/${postId}/${commentId}`))
 }
 
+
+
+export async function getBookMarks(bookmarks,id){
+  onValue(ref(db, `bookmarks/${id}`),res=>{
+    bookmarks(res.val() !== null ? Object.entries(res.val()) : [])
+  })
+}
