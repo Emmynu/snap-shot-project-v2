@@ -2,22 +2,23 @@ import { useEffect, useRef, useState } from "react"
 import "../../scss/posts.css"
 import Modal from "react-modal"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../../firebase/firebase-config";
-import { getComments, getLikes, getPosts, likePostFunc, postComment, removeComment, removeLike, savePost } from "../../data/posts";
+import { db, storage } from "../../firebase/firebase-config";
+import { getBookMarks, getComments, getLikes, getPosts, likePostFunc, postComment, removeComment, removeLike, savePost } from "../../data/posts";
 import cameraIcon from "../../images/camera.png"
-import testImg from "../../images/test.jpg"
-import { currentUser, currentUserID } from "../../data/users";
+import { currentUser, currentUserID, getFollowers } from "../../data/users";
 import Moment from "react-moment";
-import { serverTimestamp } from "firebase/database";
+import { push, serverTimestamp,ref as dbRef, onValue, remove } from "firebase/database";
 import likeIcon from "../../images/unlike.png"
 import like2Icon from "../../images/like.png"
 import commentIcon from "../../images/message.png"
 import bookmarkIcon from "../../images/bookmark.png"
+import bookmark2Icon from "../../images/bookmark2.png"
 import deleteIcon from "../../images/del.png"
 import addIcon from "../../images/add.png"
 import messageIcon from "../../images/comment.png"
 import { Link } from "react-router-dom";
 import { signOutUser } from "../nav/header";
+
 
 
 
@@ -123,14 +124,14 @@ async function createComment(id) {
 
   return (
     <>
-      <main   className="grid grid-cols-1 md:grid-cols-3 md:max-w-6xl gap-5 mx-auto mt-3 md:mt-8  post-container">
+      <main   className="grid grid-cols-1 md:grid-cols-3 md:max-w-7xl gap-5 mx-auto mt-3 md:mt-8  post-container">
        
       {/* main */}
       <section className="post-main md:col-span-2 ">
         <main>
           <header className="post-header m-7">
               <section>
-                  <h2 className=" text-[21px] md:text-[23px] text-slate-800 -tracking-wider font-medium">Trending Feeds</h2>
+                  <h2 className="text-[21px] md:text-[23px] text-slate-800 -tracking-wider font-medium">Trending Feeds</h2>
               </section>
               <section className="post-header-2">
                   <h2 onClick={openModal} className="mr-1 cursor-pointer">
@@ -173,7 +174,8 @@ async function createComment(id) {
                    <main>
                     <section className="flex items-center justify-between">
                       <div><Likes postId={post[0]} userId={user?.uid} name={user?.displayName}/></div>
-                      <img src={bookmarkIcon} alt="bookmark-icon"  className="transition-transform cursor-pointer hover:scale-105"/>
+                      
+                      <div><BookMarks postId={post[0]} userId={user?.uid} post={post[1]}/></div>
                       </section>
                       <section>
                        <div><CommentList postId={post[0]}/></div>
@@ -197,9 +199,8 @@ async function createComment(id) {
       </section>
 
       {/* side bar */}
-      <section className="bg-purple-600 post-sections hidden md:inline-grid md:col-span-1">
-        <div></div>
-        <div></div>
+      <section className="bg-white shadow-lg shadow-slate-200 post-sections hidden md:inline-grid md:col-span-1">
+       <SideBar />
       </section>
       
     </main>
@@ -251,10 +252,10 @@ function CommentList({postId}) {
   return <main className="mt-3">
     {comments.map(comment=>{
       return <section className="flex justify-between items-center">
-        <Link>
+        <Link to={`/profile/${comment[1]?.id}`}>
           <>
           <article className="flex items-center mt-2">
-              <img src={testImg} className="rounded-[50%] w-[30px] h-[30px]"/>
+              <img src={comment[1]?.url} className="rounded-[50%] w-[30px] h-[30px]"/>
             <h2 className="ml-1 font-medium text-mdx ">{comment[1]?.name}</h2>
             <span className="ml-1.5 text-sm tracking-wide text-slate-700">{comment[1]?.comment}</span>
           </article>
@@ -302,4 +303,55 @@ function Likes({postId,userId,name}){
     <h2 className="text-xs text-slate-600 mt-1 ml-1">{likes.length} {likes.length > 1 ? "Likes" : "Like"}</h2>
   </main>
 
+}
+
+function BookMarks({postId, userId, post}){
+  const [bookmark, setBookmark] = useState([])
+  const [isBookmarked, setIsBookmarked] = useState(false)
+
+  useEffect(()=>{
+   getBookMarks(setBookmark,userId)
+  },[])
+
+  
+  function bookMarkPost() {
+    if(bookmark.find(item=>item[1]?.postId === postId)){
+      setIsBookmarked(false)
+      bookmark.map(item=>{
+        item[1].postId === postId && remove(dbRef(db, `bookmarks/${userId}/${item[0]}`))
+      })
+    }
+    else{
+      push(dbRef(db, `bookmarks/${userId}`),{
+        postId,
+        post,
+      })
+      setIsBookmarked(true)
+    }
+  }
+  return <section>
+    <img src={isBookmarked ? bookmark2Icon : bookmarkIcon} alt="bookmark-icon"  className="transition-transform cursor-pointer hover:scale-105" onClick={bookMarkPost}/>
+  </section>
+}
+
+
+function SideBar(){
+  const [followers, setFollowers] = useState([])
+
+  useEffect(()=>{
+    getFollowers(currentUserID,setFollowers)
+  },[])
+
+  return <main>
+    <h2>Followers</h2>
+    {followers.length <= 0 ? followers.map(person=>{
+      <section>
+        <h2>{person[1].name}</h2>
+        <button>follow</button>
+      </section>
+    }): 
+    null
+    }
+     
+  </main>
 }

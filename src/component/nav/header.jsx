@@ -84,7 +84,10 @@ const Header = () => {
                 <NavLink to="/uploads">Uploads</NavLink>
             </span>
             <span>
-                <NavLink to="/posts">Trending Uploads</NavLink>
+                <NavLink to="/bookmarks">Bookmarks</NavLink>
+            </span>
+            <span>
+                <NavLink to="/posts">Trending Feeds</NavLink>
             </span>
             <span>{ localStorage.getItem("access") !== null || localStorage.getItem("access") !== undefined?
               <button onClick={signOutUser}>Sign Out</button>
@@ -131,9 +134,13 @@ const Header = () => {
          <span>
             <NavLink to="/uploads">Uploads</NavLink>
         </span>  
+
+        <span>
+            <NavLink to="/bookmarks">Bookmarks</NavLink>
+        </span>  
        
         <span>
-            <NavLink to="/posts">Trending Uploads</NavLink>
+            <NavLink to="/posts">Trending Feeds</NavLink>
         </span>
     </section>
 

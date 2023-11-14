@@ -8,7 +8,7 @@
         @apply flex justify-center mt-5 
     }
     .profile-img{
-        @apply w-[250px] h-[250px] object-cover rounded-[50%]
+        @apply w-[250px] h-[250px] object-cover rounded-[50%] 
     }
     .profile-name{
         @apply text-center my-1 text-2xl md:text-4xl font-medium md:overflow-hidden  overflow-x-scroll sm:scrollbar-thin scrollbar-track-slate-100
@@ -22,14 +22,14 @@
     .profile-footer button{
         @apply p-2  rounded-mdx cursor-pointer
     }
-    .profile-footer div img{
+    /* .profile-footer div img{
         @apply w-9
-    }
+    } */
     .profile-footer :nth-child(2){
         @apply bg-slate-300
     }
     .profile-actions section  {
-        @apply text-base text-slate-600 tracking-wide
+        @apply text-sm md:text-base text-slate-600 tracking-wide
     }
    .profile-snap-btn{
     @apply bottom-0 absolute right-1/3

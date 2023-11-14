@@ -76,7 +76,7 @@ function handleSearch(e){
     <main >
   
 
-      <header style={{background:`url(${Image})`}} className='w-full py-[150px] px-[20px] md:px-[100px] h-full object-cover flex justify-center'>
+      <header style={{background:`url(${Image})`}} className='w-full py-[150px] px-[5px] md:px-[100px] h-full object-cover flex justify-center'>
         <section>
         <h1 className='home-text' data-aos={`fade-right`} data-aos-duration={"3000"}>Free stock photo of 90s wallpaper, analog, beautiful flowers</h1>
         <section className='flex justify-center items-center mt-5 '>

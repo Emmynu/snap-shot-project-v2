@@ -19,7 +19,7 @@ import PageNotFound from './component/404-Page/PageNotFound'
 import Search from './component/Main/Search'
 import Profiles from './component/auth/Profiles'
 import Posts from './component/Posts/Posts'
-
+import Bookmarks from './component/Posts/Bookmarks'
 
 function App() {
   const router = createBrowserRouter(createRoutesFromElements(
@@ -48,6 +48,7 @@ function App() {
       <Route path='profile/:userId' element={<Profiles />}/>
       <Route path='upload' element={<Upload/>}/>
       <Route  path='posts' element={<Posts/>} />
+      <Route  path='bookmarks' element={<Bookmarks/>} />
      
      </Route>
 
