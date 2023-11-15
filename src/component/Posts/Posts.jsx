@@ -5,9 +5,9 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { db, storage } from "../../firebase/firebase-config";
 import { getBookMarks, getComments, getLikes, getPosts, likePostFunc, postComment, removeComment, removeLike, savePost } from "../../data/posts";
 import cameraIcon from "../../images/camera.png"
-import { currentUser, currentUserID, getFollowers } from "../../data/users";
+import { currentUser, currentUserID, getFollowers,getfollowing } from "../../data/users";
 import Moment from "react-moment";
-import { push, serverTimestamp,ref as dbRef, onValue, remove } from "firebase/database";
+import { push, serverTimestamp,ref as dbRef, remove } from "firebase/database";
 import likeIcon from "../../images/unlike.png"
 import like2Icon from "../../images/like.png"
 import commentIcon from "../../images/message.png"
@@ -16,7 +16,7 @@ import bookmark2Icon from "../../images/bookmark2.png"
 import deleteIcon from "../../images/del.png"
 import addIcon from "../../images/add.png"
 import messageIcon from "../../images/comment.png"
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { signOutUser } from "../nav/header";
 
 
@@ -337,21 +337,70 @@ function BookMarks({postId, userId, post}){
 
 function SideBar(){
   const [followers, setFollowers] = useState([])
+  const [following, setFollowing] = useState([])
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [loggedUser, setLoggedUser] = useState([])
+  const [showFollowers, setShowFollowers] = useState(true)
+
+
 
   useEffect(()=>{
-    getFollowers(currentUserID,setFollowers)
+    currentUser(setLoggedUser)
+    getFollowers(currentUserID, setFollowers)
+    getfollowing(currentUserID, setFollowing)
   },[])
 
-  return <main>
-    <h2>Followers</h2>
-    {followers.length <= 0 ? followers.map(person=>{
-      <section>
-        <h2>{person[1].name}</h2>
-        <button>follow</button>
+
+
+  
+
+
+  const active = {
+    borderBottom: "2px solid green"
+  }
+  
+  return <main className="mx-2">
+   
+   <header className="text-slate-600 tracking-wider my-2 text-center flex justify-center cursor-pointer">
+      <h2 onClick={()=>setShowFollowers(true)} className="mr-3">Followers</h2>
+      <h4 onClick={()=>setShowFollowers(false)} >Following</h4>
+   </header>
+
+   <section className="mt-5">{showFollowers ? followers.length > 0 ? 
+    followers.map(person=>{
+      return <section className="flex justify-between items-center mx-5 my-2">
+        <h2>{person[1].name || "Maker"}</h2>
+        <button className="text-green-600 font-medium text-sm tracking-wide " onClick={()=>followBack(person[1],following,loggedUser,person[1].id)}>{"follow"}</button>
       </section>
     }): 
     null
+    : 
+    <div>
+      {following.map((user)=>{
+        console.log(user[1]);
+        return <section className="flex justify-between items-center mx-5 my-2">
+        <h2>{user[1]?.person?.name || "Maker"}</h2>
+        {/* <button className="text-green-600 font-medium text-sm tracking-wide " onClick={()=>followBack(user[1])}>follow</button> */}
+      </section>
+      })}
+    </div>
     }
+    </section>
+
      
   </main>
+}
+
+
+export function followBack(person,following,loggedUser,id){  
+  if(following.find(user=>user[1]?.person?.id === id)){
+    following.map(user=>{
+     user[1]?.person?.id === id && remove(dbRef(db, `following/${loggedUser?.uid}/${user[0]}`))
+    })
+  }
+  else{
+    push(dbRef(db, `following/${loggedUser?.uid}`),{
+      person
+    })
+  }
 }

@@ -44,13 +44,14 @@ useEffect(()=>{
   })
 },[])
 
-// useEffect(()=>{},[searchType])
+
 if (Loading)return <div className='explore-state'>
   <div></div>
   <div></div>
   <div></div>
   <div></div>
 </div>
+
 if (error)return <h2 className='explore-state  h-[73vh]  translate-y-[40%]'>{error} <span className='text-base font-normal underline text-emerald-600 ml-2 '><Link to={0}>Try again</Link></span></h2>
 
 
@@ -61,7 +62,9 @@ function handleSearch(e){
   })
 }
 
-  function searchFunc(){
+  function searchFunc(e){
+    e.preventDefault()
+    console.log("searched");
     if(search.fileType.length >0 && search.word.length>0){
       window.location = `/search/?text=${search.word}&type=${search.fileType}`
     }
@@ -79,14 +82,15 @@ function handleSearch(e){
       <header style={{background:`url(${Image})`}} className='w-full py-[150px] px-[5px] md:px-[100px] h-full object-cover flex justify-center'>
         <section>
         <h1 className='home-text' data-aos={`fade-right`} data-aos-duration={"3000"}>Free stock photo of 90s wallpaper, analog, beautiful flowers</h1>
-        <section className='flex justify-center items-center mt-5 '>
+        <section className='flex justify-center w-full items-center mt-6 -ml-8'>
           <select value={search.fileType} name="fileType" onChange={handleSearch} className='bg-green-600 text-white p-2 outline-none tracking-wider cursor-pointer '>
             <option >Photos</option>
             <option >Videos</option>
           </select>
-          <input type="text" name="word" onChange={handleSearch} className="px-2 outline-none text-sm text-slate-600 tracking-wider border border-slate-700  w-1/2 h-[37px]" placeholder='search....'/>
-          
-          <img src={searchIcon} onClick={searchFunc} className='p-[3px] cursor-pointer bg-white border border-l-0 w-9 border-slate-700 '/>
+          <form onSubmit={searchFunc}>
+            <input type="text" name="word" onChange={handleSearch} className="px-2 outline-none text-sm text-slate-600 tracking-wider border border-slate-700 w-[160%] md:w-[200%] h-[37px]" placeholder='search....'/>
+          </form>
+
         </section>
         </section>
       </header>
