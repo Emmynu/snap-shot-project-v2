@@ -57,7 +57,7 @@ export default function UploadDetailed() {
             </h3>
       
             <h3>
-                <span className='detailed-label'>DateAdded:</span>
+                <span className='detailed-label'>Added:</span>
                 <span className='detailed-content'>
                     <Moment fromNow>{upload?.time}</Moment>
                 </span>

@@ -21,7 +21,6 @@ export async function getUsers(userContainer,id,loading){
   })
 }
 
-
 export function getFollowers(id,followers) {
   const followersRef = ref(db, `followers/${id}`)
   onValue(followersRef,res=>{
@@ -31,5 +30,11 @@ export function getFollowers(id,followers) {
     }else{ followers([])}
     
     
+  })
+}
+
+export function getfollowing(id,following) {
+  onValue(ref(db, `following/${id}`),res=>{
+     following(res.exists() ? Object.entries(res.val()) : [])
   })
 }
